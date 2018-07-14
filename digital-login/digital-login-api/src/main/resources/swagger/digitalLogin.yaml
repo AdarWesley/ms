@@ -1,0 +1,147 @@
+---
+# This is a shopping list API.  
+swagger: "2.0"
+info:
+  description: digitalLogin REST API definition
+  version: 1.0.0
+  title: digitalLogin
+basePath: /api
+schemes:
+- http
+
+# Tags organize operations into groups for presentation in the Swagger UI.
+# Each tag has an optional description, which the Swagger UI will display in 
+# the tag group header.
+tags:
+- name: User
+  description: The User resource, accessed by its ID
+
+paths:
+
+  # Each Path Item Object describes a resource, containing a set of operations
+  # at a specified path.  The Path Item object can define parameters and 
+  # responses common all of its contained operations.
+  /users/{id}:
+    # Operations are identified by an HTTP method.  
+    get:
+      tags:
+      - User
+      description: Retrieves an instance of the resource User, having the specified id.
+      operationId: getUser
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID of the requested User instance
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Successful response, with a representation of the User resource.
+          schema:
+            # Reference to a Schema Object described in 'definitions' section
+            $ref: "#/definitions/User"
+        404:
+          description: The requested User resource instance was not found.
+
+  /users:
+    get:
+      tags:
+      - User
+      description: Retrieve a user by their username
+      operationId: getUserByName
+      consumes: 
+      - application/json
+      produces: 
+      - application/json
+      parameters:
+      - name: username
+        in: query
+        description: The name of the user to retrieve
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful response, with a representation of the User resource.
+          schema:
+            # Reference to a Schema Object described in 'definitions' section
+            $ref: "#/definitions/User"
+        404:
+          description: The requested User resource instance was not found.
+
+  /authenticate:
+    post:
+      tags:
+      - Authentication
+      summary: Authenticate
+      description: Authenticate user by Username and Password, return JWT token upon success.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: JwtAuthenticationRequest
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/JwtAuthenticationRequest"  
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/JwtAuthenticationResponse"
+        401:
+          description: Not authorized
+
+# The definitions section contains a set of named Schema Objects.  Each schema
+# object describes a reusable data type, which can be reference by name.
+
+definitions:
+  User:
+    type: object
+    description: An individual User resource instance.
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      isEnabled:
+        type: boolean
+    example:
+      id : "1234"
+      username : "simpleuser"
+      firstName: "Simple"
+      lastName: "User"
+      email: "Simple.User@sample.com"
+      isEnabled: true
+
+  JwtAuthenticationRequest:
+    type: object
+    description: A request carrying Username and Password for authentication.
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+    example:
+      username: "jhonsnow"
+      password: "winterIsHere"
+
+  JwtAuthenticationResponse:
+    type: object
+    description: Response for a successful authentication containing the token
+    properties:
+      token:
+        type: string
+        
