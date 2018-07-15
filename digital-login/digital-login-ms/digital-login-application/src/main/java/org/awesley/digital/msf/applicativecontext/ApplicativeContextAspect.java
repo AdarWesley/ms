@@ -1,7 +1,5 @@
 package org.awesley.digital.msf.applicativecontext;
 
-import javax.inject.Inject;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;

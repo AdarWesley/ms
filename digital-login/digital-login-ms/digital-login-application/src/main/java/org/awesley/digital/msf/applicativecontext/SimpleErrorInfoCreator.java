@@ -1,10 +1,6 @@
 package org.awesley.digital.msf.applicativecontext;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.Signature;
 import org.awesley.digital.msf.errors.ApplicationException;
 import org.awesley.digital.msf.errors.ErrorInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +24,7 @@ public class SimpleErrorInfoCreator implements IErrorInfoCreator {
 			errorCode = innerError.getErrorCode();
 		}
 		
-		String errorMessage = errorMessageFormatter.FormatErrorMessage(jp, ex);
+		String errorMessage = errorMessageFormatter.FormatErrorMessage(new JoinPointErrorContext(jp, ex));
 		return new ErrorInfo(errorCode, errorMessage, innerError);
 	}
 }
