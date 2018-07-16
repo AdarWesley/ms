@@ -1,5 +1,8 @@
 package org.awesley.digital.msf.applicativecontext;
 
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+
 import org.hibernate.event.internal.DefaultAutoFlushEventListener;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -29,19 +32,19 @@ public class ApplicativeContextConfiguration {
 	
 	@Bean
 	@Qualifier("methodName")
-	public IErrorMessageFragment methodNameErrorMessageFragment() {
+	public IErrorMessageFragment methodName() {
 		return new MethodNameErrorMessageFragment();
 	}
 	
 	@Bean
 	@Qualifier("contextEntities")
-	public IErrorMessageFragment contextEntitiesErrorMessageFragment() {
+	public IErrorMessageFragment contextEntities() {
 		return new ContextEntitiesErrorMessageFragment();
 	}
 	
 	@Bean
 	@Qualifier("innerError")
-	public IErrorMessageFragment innerErrorMessageFragment() {
+	public IErrorMessageFragment innerError() {
 		return new InnerErrorMessageFragment();
 	}
 	
@@ -52,12 +55,8 @@ public class ApplicativeContextConfiguration {
 	}
 	
 	@Bean
-	public MessageSource errorFormatsSource() {
-		ReloadableResourceBundleMessageSource errorFormatsMessageSource = new ReloadableResourceBundleMessageSource();
-		
-		errorFormatsMessageSource.setBasename("ErrorFormats");
-		errorFormatsMessageSource.setDefaultEncoding("UTF-8");
-		
-		return errorFormatsMessageSource;
+	public ResourceBundle errorFormatResources() {
+		ResourceBundle rb = PropertyResourceBundle.getBundle("ErrorFormatResources");
+		return rb;
 	}
 }
