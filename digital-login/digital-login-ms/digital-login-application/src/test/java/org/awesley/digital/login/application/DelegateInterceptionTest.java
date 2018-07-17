@@ -40,7 +40,7 @@ public class DelegateInterceptionTest {
 	@Inject
 	private UserApi userApiDelegate;
 	
-	private static User mockUser = CreateUser();	
+	private static User mockUser = createUser();	
 	
 	@Test
 	@WithMockUser(roles = {"ADMIN"})
@@ -52,7 +52,7 @@ public class DelegateInterceptionTest {
 		
 		userApiDelegate.getUser(1L);
 		
-		assertEquals(0L, ApplicativeContextEntities.Count());
+		assertEquals(0L, ApplicativeContextEntities.count());
 	}
 
 	@Test
@@ -62,11 +62,11 @@ public class DelegateInterceptionTest {
 		Mockito.when(serviceMock.GetUser(Mockito.any())).thenReturn(mockUser);
 		
 		ReflectionTestUtils.setField(userApiDelegate, UserApiImpl.class, "userGetService", serviceMock, IUserGetService.class);
-		ApplicativeContextEntities.AddContextEntities("TestContext", new ContextEntityInfo("TestEntity", 1L));
+		ApplicativeContextEntities.addContextEntities("TestContext", new ContextEntityInfo("TestEntity", 1L));
 		
 		userApiDelegate.getUser(1L);
 		
-		assertEquals(0L, ApplicativeContextEntities.Count());
+		assertEquals(0L, ApplicativeContextEntities.count());
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class DelegateInterceptionTest {
 		}
 		
 		assertTrue(didThrow);
-		assertEquals(0L, ApplicativeContextEntities.Count());
+		assertEquals(0L, ApplicativeContextEntities.count());
 	}
 
 	@Test
@@ -155,14 +155,14 @@ public class DelegateInterceptionTest {
 		Mockito
 			.when(serviceMock.GetUser(Mockito.anyLong()))
 			.thenAnswer(invocation -> {
-				ApplicativeContextEntities.AddContextEntities("TestContext", new ContextEntityInfo(entityType, 1L));
+				ApplicativeContextEntities.addContextEntities("TestContext", new ContextEntityInfo(entityType, 1L));
 				throw exceptionToThrow;
 			});
 		
 		ReflectionTestUtils.setField(userApiDelegate, UserApiImpl.class, "userGetService", serviceMock, IUserGetService.class);
 	}
 
-	private static User CreateUser() {
+	private static User createUser() {
 		User user = new JpaUser();
 		user.setFirstname("Test");
 		user.setLastname("User");
@@ -179,7 +179,7 @@ public class DelegateInterceptionTest {
 			return new IEntityErrorMessageFragment() {
 				
 				@Override
-				public String Create(JoinPointErrorContext jpec, ContextEntityInfo entityInfo) {
+				public String create(JoinPointErrorContext jpec, ContextEntityInfo entityInfo) {
 					return "Entity With Fragment";
 				}
 			};

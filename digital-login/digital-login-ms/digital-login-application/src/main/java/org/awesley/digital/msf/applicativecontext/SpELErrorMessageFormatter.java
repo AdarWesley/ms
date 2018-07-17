@@ -23,7 +23,7 @@ public class SpELErrorMessageFormatter implements IErrorMessageFormatter {
 	ApplicationContext ctx;
 	
 	@Override
-	public String FormatErrorMessage(JoinPointErrorContext jpec) {
+	public String formatErrorMessage(JoinPointErrorContext jpec) {
 		String methodName = getMethodName(jpec);
 		
 		ExpressionParser parser = new SpelExpressionParser();

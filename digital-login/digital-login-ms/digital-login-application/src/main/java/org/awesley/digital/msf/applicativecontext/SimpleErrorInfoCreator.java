@@ -14,7 +14,7 @@ public class SimpleErrorInfoCreator implements IErrorInfoCreator {
 	}
 
 	@Override
-	public ErrorInfo CreateErrorInfo(JoinPoint jp, Throwable ex) {
+	public ErrorInfo createErrorInfo(JoinPoint jp, Throwable ex) {
 		long errorCode = 0;
 		ErrorInfo innerError = null;
 
@@ -24,7 +24,7 @@ public class SimpleErrorInfoCreator implements IErrorInfoCreator {
 			errorCode = innerError.getErrorCode();
 		}
 		
-		String errorMessage = errorMessageFormatter.FormatErrorMessage(new JoinPointErrorContext(jp, ex));
+		String errorMessage = errorMessageFormatter.formatErrorMessage(new JoinPointErrorContext(jp, ex));
 		return new ErrorInfo(errorCode, errorMessage, innerError);
 	}
 }

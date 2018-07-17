@@ -1,6 +1,6 @@
 package org.awesley.digital.msf.applicativecontext;
 
 public interface IEntityErrorMessageFragment {
-	String Create(JoinPointErrorContext jpec, ContextEntityInfo entityInfo);
+	String create(JoinPointErrorContext jpec, ContextEntityInfo entityInfo);
 
 }

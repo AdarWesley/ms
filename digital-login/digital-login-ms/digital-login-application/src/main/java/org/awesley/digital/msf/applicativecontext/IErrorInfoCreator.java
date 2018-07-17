@@ -5,6 +5,6 @@ import org.awesley.digital.msf.errors.ErrorInfo;
 
 public interface IErrorInfoCreator {
 
-	ErrorInfo CreateErrorInfo(JoinPoint jp, Throwable ex);
+	ErrorInfo createErrorInfo(JoinPoint jp, Throwable ex);
 
 }

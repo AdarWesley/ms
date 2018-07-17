@@ -45,7 +45,7 @@ public class DelegateInterceptionSpELTest {
 	@Inject
 	private UserApi userApiDelegate;
 	
-	private static User mockUser = CreateUser();	
+	private static User mockUser = createUser();	
 	
 //	@Inject
 //	private ResourceBundle errorFormatResources;
@@ -95,14 +95,14 @@ public class DelegateInterceptionSpELTest {
 		Mockito
 			.when(serviceMock.GetUser(Mockito.anyLong()))
 			.thenAnswer(invocation -> {
-				ApplicativeContextEntities.AddContextEntities("TestContext", new ContextEntityInfo(entityType, 1L));
+				ApplicativeContextEntities.addContextEntities("TestContext", new ContextEntityInfo(entityType, 1L));
 				throw exceptionToThrow;
 			});
 		
 		ReflectionTestUtils.setField(userApiDelegate, UserApiImpl.class, "userGetService", serviceMock, IUserGetService.class);
 	}
 
-	private static User CreateUser() {
+	private static User createUser() {
 		User user = new JpaUser();
 		user.setFirstname("Test");
 		user.setLastname("User");
@@ -117,7 +117,7 @@ public class DelegateInterceptionSpELTest {
 		@Primary
 		public ResourceBundle errorFormatResources() {
 			String testResource =
-					"DefaultErrorFormat='While executing ' + @methodName.Create(#ctx) + ' on ' + @contextEntities.Create(#ctx) + ' received error: ' + @innerError.Create(#ctx)\n" +
+					"DefaultErrorFormat='While executing ' + @methodName.create(#ctx) + ' on ' + @contextEntities.create(#ctx) + ' received error: ' + @innerError.create(#ctx)\n" +
 					"UserApiImpl.getUser='Completely different error format'";
 			StringReader sr = new StringReader(testResource);
 			ResourceBundle rb = null;

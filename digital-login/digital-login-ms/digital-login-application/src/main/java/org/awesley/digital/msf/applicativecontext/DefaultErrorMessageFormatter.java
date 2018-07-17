@@ -18,9 +18,9 @@ public class DefaultErrorMessageFormatter implements IErrorMessageFormatter {
 	private IErrorMessageFragment innerError;
 	
 	@Override
-	public String FormatErrorMessage(JoinPointErrorContext jpec) {
+	public String formatErrorMessage(JoinPointErrorContext jpec) {
 		String message = String.format("While executing %1$s on %2$s received error: %3$s", 
-				methodName.Create(jpec), contextEntities.Create(jpec), innerError.Create(jpec));
+				methodName.create(jpec), contextEntities.create(jpec), innerError.create(jpec));
 		return message;
 	}
 

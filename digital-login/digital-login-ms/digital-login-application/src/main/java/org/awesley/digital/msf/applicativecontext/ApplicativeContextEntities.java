@@ -9,7 +9,7 @@ public class ApplicativeContextEntities {
 	private static ThreadLocal<LinkedHashMap<String, ArrayList<ContextEntityInfo>>> contextEntities = 
 			new ThreadLocal<LinkedHashMap<String, ArrayList<ContextEntityInfo>>>();
 
-	public static long Count() {
+	public static long count() {
 		LinkedHashMap<String, ArrayList<ContextEntityInfo>> map = contextEntities.get();
 		if (map == null) {
 			return 0L;
@@ -17,7 +17,7 @@ public class ApplicativeContextEntities {
 		return map.size();
 	}
 
-	public static void AddContextEntities(String contextKey, ContextEntityInfo contextEntityInfo) {
+	public static void addContextEntities(String contextKey, ContextEntityInfo contextEntityInfo) {
 		ArrayList<ContextEntityInfo> contextEntityList = verifyInitializedAndGetEntityList(contextKey);
 		contextEntityList.add(contextEntityInfo);
 	}
@@ -36,11 +36,11 @@ public class ApplicativeContextEntities {
 		return contextEntityList;
 	}
 
-	public static void Clear() {
+	public static void clear() {
 		contextEntities.set(null);
 	}
 
-	public static Collection<ArrayList<ContextEntityInfo>> GetContextEntities() {
+	public static Collection<ArrayList<ContextEntityInfo>> getContextEntities() {
 		return contextEntities.get() != null? contextEntities.get().values() : null;
 	}
 }

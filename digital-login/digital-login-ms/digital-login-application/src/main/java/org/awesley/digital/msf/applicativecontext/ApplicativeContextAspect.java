@@ -36,18 +36,18 @@ public class ApplicativeContextAspect {
 	@Before("resourceDelegate()")
 	public void beforeResourceDelegate(JoinPoint jp) {
 		System.out.println("XXXXX: " + jp.getSignature().getDeclaringTypeName() + " XXXXX");
-		ApplicativeContextEntities.Clear();
+		ApplicativeContextEntities.clear();
 	}
 	
 	@AfterThrowing(pointcut = "resourceDelegate()", throwing = "ex")
 	public void afterThrowingResourceDelegate(JoinPoint jp, Throwable ex) {
-		ErrorInfo errorInfo = errorInfoCreator.CreateErrorInfo(jp, ex);
-		ApplicativeContextEntities.Clear();
+		ErrorInfo errorInfo = errorInfoCreator.createErrorInfo(jp, ex);
+		ApplicativeContextEntities.clear();
 		throw new ApplicationException(errorInfo, ex);
 	}
 
 	@AfterReturning(pointcut = "resourceDelegate()")
 	public void afterResourceDelegate(JoinPoint jp) {
-		ApplicativeContextEntities.Clear();
+		ApplicativeContextEntities.clear();
 	}
 }

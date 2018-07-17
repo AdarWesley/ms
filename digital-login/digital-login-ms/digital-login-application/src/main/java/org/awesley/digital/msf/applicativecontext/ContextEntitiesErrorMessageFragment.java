@@ -14,8 +14,8 @@ public class ContextEntitiesErrorMessageFragment implements IErrorMessageFragmen
 	private ConfigurableApplicationContext ctx;
 	
 	@Override
-	public String Create(JoinPointErrorContext jpec) {
-		Collection<ArrayList<ContextEntityInfo>> contextEntities = ApplicativeContextEntities.GetContextEntities();
+	public String create(JoinPointErrorContext jpec) {
+		Collection<ArrayList<ContextEntityInfo>> contextEntities = ApplicativeContextEntities.getContextEntities();
 		if (contextEntities == null) {
 			return null;
 		}
@@ -24,7 +24,7 @@ public class ContextEntitiesErrorMessageFragment implements IErrorMessageFragmen
 		for (ArrayList<ContextEntityInfo> list : contextEntities) {
 			for (ContextEntityInfo entityInfo : list) {
 				IEntityErrorMessageFragment eemf = getEntityErrorMessageFragmentBean(entityInfo);
-				sb.append(eemf.Create(jpec, entityInfo));
+				sb.append(eemf.create(jpec, entityInfo));
 			}
 		}
 		
