@@ -24,7 +24,8 @@ public class UserApiImpl implements UserApi {
 
 	@Override
 	public User getUserByName(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		org.awesley.digital.login.service.model.User modelUser = userGetService.GetUser(1L);
+		User user = userMapper.mapFrom(modelUser);
+		return user;
 	}
 }

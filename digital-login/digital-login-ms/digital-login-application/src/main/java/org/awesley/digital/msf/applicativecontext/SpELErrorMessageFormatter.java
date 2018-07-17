@@ -5,6 +5,10 @@ import java.util.ResourceBundle;
 
 import org.aspectj.lang.Signature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.expression.AccessException;
+import org.springframework.expression.BeanResolver;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -15,6 +19,9 @@ public class SpELErrorMessageFormatter implements IErrorMessageFormatter {
 	@Autowired
 	ResourceBundle errorFormatResources;
 	
+	@Autowired
+	ApplicationContext ctx;
+	
 	@Override
 	public String FormatErrorMessage(JoinPointErrorContext jpec) {
 		String methodName = getMethodName(jpec);
@@ -22,11 +29,23 @@ public class SpELErrorMessageFormatter implements IErrorMessageFormatter {
 		ExpressionParser parser = new SpelExpressionParser();
 		String errorMessageExpression = getErrorMessageExpression(methodName);
 		Expression expr = parser.parseExpression(errorMessageExpression);
-		
-		StandardEvaluationContext context = new StandardEvaluationContext();
-		context.setVariable("ctx", jpec);
+
+		StandardEvaluationContext context = initializeContext(jpec);
 
 		return expr.getValue(context, String.class);
+	}
+
+	private StandardEvaluationContext initializeContext(JoinPointErrorContext jpec) {
+		StandardEvaluationContext context = new StandardEvaluationContext();
+		context.setVariable("ctx", jpec);
+		context.setBeanResolver(new BeanResolver() {
+			
+			@Override
+			public Object resolve(EvaluationContext evalCtx, String beanName) throws AccessException {
+				return ctx.getBean(beanName);
+			}
+		});
+		return context;
 	}
 
 	private String getMethodName(JoinPointErrorContext jpec) {
