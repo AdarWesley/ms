@@ -38,6 +38,7 @@ public class SpELErrorMessageFormatter implements IErrorMessageFormatter {
 	private StandardEvaluationContext initializeContext(JoinPointErrorContext jpec) {
 		StandardEvaluationContext context = new StandardEvaluationContext();
 		context.setVariable("ctx", jpec);
+		context.setVariable("args", jpec.getJoinPoint().getArgs());
 		context.setBeanResolver(new BeanResolver() {
 			
 			@Override

@@ -87,7 +87,7 @@ public class DelegateInterceptionSpELTest {
 		}
 		assertTrue(didThrow);
 		assertNotNull(errorInfo);
-		assertEquals("Completely different error format", errorInfo.getMessage());
+		assertEquals("Completely different error format on: User[1]", errorInfo.getMessage());
 	}
 
 	private void initializeMockObject(String entityType, Throwable exceptionToThrow) {
@@ -118,7 +118,7 @@ public class DelegateInterceptionSpELTest {
 		public ResourceBundle errorFormatResources() {
 			String testResource =
 					"DefaultErrorFormat='While executing ' + @methodName.create(#ctx) + ' on ' + @contextEntities.create(#ctx) + ' received error: ' + @innerError.create(#ctx)\n" +
-					"UserApiImpl.getUser='Completely different error format'";
+					"UserApiImpl.getUser='Completely different error format on: ' + @userEntMessageFragment.create(#args[0])";
 			StringReader sr = new StringReader(testResource);
 			ResourceBundle rb = null;
 			try {

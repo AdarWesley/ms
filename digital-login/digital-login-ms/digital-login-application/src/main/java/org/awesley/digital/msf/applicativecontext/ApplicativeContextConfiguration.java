@@ -3,6 +3,7 @@ package org.awesley.digital.msf.applicativecontext;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import org.awesley.digital.msf.applicativecontext.entity.UserEntityMessageFragment;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,5 +56,10 @@ public class ApplicativeContextConfiguration {
 	public ResourceBundle errorFormatResources() {
 		ResourceBundle rb = PropertyResourceBundle.getBundle("ErrorFormatResources");
 		return rb;
+	}
+	
+	@Bean(name = "userEntMessageFragment")
+	public UserEntityMessageFragment userEntMessageFragment() {
+		return new UserEntityMessageFragment();
 	}
 }
