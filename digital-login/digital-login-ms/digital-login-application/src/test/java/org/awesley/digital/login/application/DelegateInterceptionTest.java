@@ -25,7 +25,7 @@ import org.awesley.digital.login.service.interfaces.IUserGetService;
 import org.awesley.digital.login.service.model.User;
 import org.awesley.digital.msf.applicativecontext.ApplicativeContextEntities;
 import org.awesley.digital.msf.applicativecontext.ContextEntityInfo;
-import org.awesley.digital.msf.applicativecontext.IEntityErrorMessageFragment;
+import org.awesley.digital.msf.applicativecontext.entity.IEntityErrorMessageFragment;
 import org.awesley.digital.msf.applicativecontext.JoinPointErrorContext;
 import org.awesley.digital.msf.errors.ApplicationException;
 import org.awesley.digital.msf.errors.ErrorInfo;
@@ -179,7 +179,7 @@ public class DelegateInterceptionTest {
 			return new IEntityErrorMessageFragment() {
 				
 				@Override
-				public String create(JoinPointErrorContext jpec, ContextEntityInfo entityInfo) {
+				public String create(String entityType, long entityId) {
 					return "Entity With Fragment";
 				}
 			};

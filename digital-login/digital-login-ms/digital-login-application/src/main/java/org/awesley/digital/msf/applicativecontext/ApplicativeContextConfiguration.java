@@ -3,6 +3,8 @@ package org.awesley.digital.msf.applicativecontext;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import org.awesley.digital.msf.applicativecontext.entity.DefaultEntityErrorMessageFragment;
+import org.awesley.digital.msf.applicativecontext.entity.IEntityErrorMessageFragment;
 import org.awesley.digital.msf.applicativecontext.entity.UserEntityMessageFragment;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

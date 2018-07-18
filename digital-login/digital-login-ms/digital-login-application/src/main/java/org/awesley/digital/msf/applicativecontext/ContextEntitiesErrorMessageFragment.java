@@ -3,6 +3,7 @@ package org.awesley.digital.msf.applicativecontext;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.awesley.digital.msf.applicativecontext.entity.IEntityErrorMessageFragment;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils;
@@ -24,7 +25,7 @@ public class ContextEntitiesErrorMessageFragment implements IErrorMessageFragmen
 		for (ArrayList<ContextEntityInfo> list : contextEntities) {
 			for (ContextEntityInfo entityInfo : list) {
 				IEntityErrorMessageFragment eemf = getEntityErrorMessageFragmentBean(entityInfo);
-				sb.append(eemf.create(jpec, entityInfo));
+				sb.append(eemf.create(entityInfo.getEntityType(), entityInfo.getId()));
 			}
 		}
 		
