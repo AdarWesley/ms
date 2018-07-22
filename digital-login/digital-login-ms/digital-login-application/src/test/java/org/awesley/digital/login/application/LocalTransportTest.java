@@ -193,16 +193,17 @@ public class LocalTransportTest {
 		assertNotNull(response);
 		
 		WebClient.client(userApiClient).header("Authorization", "Bearer " + response.getToken());
-		User user = userApiClient.getUser(1L);
+		User user = userApiClient.getUser(1L).readEntity(User.class);
 		
 		assertNotNull(user);
 	}
 	
 	private JwtAuthenticationResponse doAuthentication(String username, String password) {
-		JwtAuthenticationRequest request = new JwtAuthenticationRequest()
-				.username(username)
-				.password(password);
-		JwtAuthenticationResponse response = authApiClient.authenticatePost(request);
+		JwtAuthenticationRequest request = new JwtAuthenticationRequest();
+		request.setUsername(username);
+		request.setPassword(password);
+
+		JwtAuthenticationResponse response = authApiClient.authenticatePost(request).readEntity(JwtAuthenticationResponse.class);
 		return response;
 	}
 	

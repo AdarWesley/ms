@@ -1,5 +1,7 @@
 package org.awesley.digital.login.resources.implementation.delegate;
 
+import javax.ws.rs.core.Response;
+
 import org.awesley.digital.login.resources.interfaces.AuthenticationApi;
 import org.awesley.digital.login.resources.interfaces.IMapper;
 import org.awesley.digital.login.resources.models.JwtAuthenticationRequest;
@@ -19,12 +21,12 @@ public class AuthenticationApiImpl implements AuthenticationApi {
 	private IMapper<JwtAuthenticationResponse, org.awesley.digital.login.service.model.JwtToken> responseMapper;
 	
 	@Override
-	public JwtAuthenticationResponse authenticatePost(JwtAuthenticationRequest jwtAuthenticationRequest) {
+	public Response authenticatePost(JwtAuthenticationRequest jwtAuthenticationRequest) {
 		org.awesley.digital.login.service.model.UserPasswordCredentials credentials = 
 				requestMapper.mapFrom(jwtAuthenticationRequest);
 		
 		org.awesley.digital.login.service.model.JwtToken jwtToken = authenticationService.authenticate(credentials);
 		
-		return responseMapper.mapFrom(jwtToken);
+		return Response.ok(responseMapper.mapFrom(jwtToken)).build();
 	}
 }
