@@ -42,69 +42,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.5.0</version>
-				<executions>
-					<execution>
-						<id>swagger-generate-server-code</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<includeProjectDependencies>false</includeProjectDependencies>
-					<includePluginDependencies>true</includePluginDependencies>
-					<executableDependency>
-						<groupId>io.swagger</groupId>
-						<artifactId>swagger-codegen-cli</artifactId>
-					</executableDependency>
-					<mainClass>io.swagger.codegen.SwaggerCodegen</mainClass>
-					<arguments>
-						<argument>generate</argument>
-						<argument>-i</argument>
-						<argument>${project.build.directory}/digitalLogin.yaml</argument>
-						<argument>-l</argument>
-						<argument>jaxrs-cxf</argument>
-						<argument>-o</argument>
-						<argument>${project.build.directory}</argument>
-						<argument>--api-package</argument>
-						<argument>${api-package}</argument>
-						<argument>--model-package</argument>
-						<argument>${model-package}</argument>
-					</arguments>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>io.swagger</groupId>
-						<artifactId>swagger-codegen-cli</artifactId>
-						<version>2.1.6</version>
-						<type>jar</type>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>add-generated-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${project.build.directory}/gen/java/</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.10</version>
@@ -132,6 +69,50 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+			    <groupId>io.swagger</groupId>
+			    <artifactId>swagger-codegen-maven-plugin</artifactId>
+			    <version>2.3.1</version>
+			    <executions>
+			        <execution>
+			            <goals>
+			                <goal>generate</goal>
+			            </goals>
+			            <configuration>
+			                <inputSpec>${project.build.directory}/digitalLogin.yaml</inputSpec>
+			                <language>jaxrs-cxf</language>
+			                <output>${project.build.directory}</output>
+			                <apiPackage>${api-package}</apiPackage>
+			                <modelPackage>${model-package}</modelPackage>
+			                <generateApiTests>false</generateApiTests>
+			                <generateModelTests>false</generateModelTests>
+			                <generateSupportingFiles>false</generateSupportingFiles>
+			                <configOptions>
+			                   <sourceFolder>src/gen/java</sourceFolder>
+			                </configOptions>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>add-generated-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/src/gen/java/</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>						
 		</plugins>
 	</build>
 </project>
