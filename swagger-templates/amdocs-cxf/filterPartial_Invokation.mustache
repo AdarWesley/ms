@@ -1,0 +1,9 @@
+if ({{paramName}} != null && !{{paramName}}.isEmpty()) {
+            try {
+                JacksonJsonProvider jacksonJsonProvider = AppContext.getContext().getBean(JacksonJsonProvider.class);
+                ObjectMapper objectMapper = jacksonJsonProvider.locateMapper(null, MediaType.APPLICATION_JSON_TYPE);
+                parameters.setFilterCriteria(objectMapper.readValue({{paramName}}, CodegenUtil.FilterCriteria.class));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }

@@ -13,7 +13,6 @@ public class SimpleErrorInfoCreator implements IErrorInfoCreator {
 	public SimpleErrorInfoCreator() {
 	}
 
-	@Override
 	public ErrorInfo createErrorInfo(JoinPoint jp, Throwable ex) {
 		long errorCode = 0;
 		ErrorInfo innerError = null;

@@ -1,0 +1,12 @@
+package {{package}};
+
+{{#imports}}import {{import}};
+{{/imports}}
+import javax.xml.bind.annotation.*;
+{{#serializableModel}}import java.io.Serializable;{{/serializableModel}}
+{{#models}}{{#model}}
+{{#discriminator}}import com.fasterxml.jackson.annotation.JsonTypeInfo;{{/discriminator}}
+{{vendorExtensions.x-dox-CustomAnnotationImports}}
+{{#isEnum}}{{>enumClass}}{{/isEnum}}
+{{^isEnum}}{{>model}}{{/isEnum}}
+{{/model}}{{/models}}

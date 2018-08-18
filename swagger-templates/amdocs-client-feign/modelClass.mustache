@@ -1,0 +1,73 @@
+{{#registerCurrentModel}}{{classname}}::{{discriminator}}{{/registerCurrentModel}}
+{{#description}}
+/**
+ * {{description}}
+ **/{{/description}}
+ {{#discriminator}}@JsonTypeInfo(
+ use = JsonTypeInfo.Id.MINIMAL_CLASS,
+ include = JsonTypeInfo.As.PROPERTY,
+ property = "{{discriminator}}")
+ {{/discriminator}}@XmlRootElement(name="{{classname}}")
+ public class {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}implements Cloneable{{#serializableModel}}, Serializable{{/serializableModel}}
+ {
+    {{#vars}}{{#isNotDiscriminatorProperty}}/*##{{name}}##*/
+    {{#isEnum}}public enum {{datatypeWithEnum}} implements Cloneable{{#serializableModel}}, Serializable{{/serializableModel}}
+    {
+        {{#allowableValues}}{{#values}}{{.}}{{^-last}}, {{/-last}}{{#-last}};{{/-last}}{{/values}}{{/allowableValues}}
+    };
+    {{vendorExtensions.x-dox-CustomAnnotation}}
+    private {{{datatypeWithEnum}}} {{name}} = {{{defaultValue}}};
+    {{/isEnum}}{{^isEnum}}{{vendorExtensions.x-dox-CustomAnnotation}}
+    private {{{datatype}}} {{name}} = {{{defaultValue}}};
+    {{/isEnum}}
+    {{/isNotDiscriminatorProperty}}{{/vars}}
+    
+    {{#vars}}{{#isNotDiscriminatorProperty}}/*##{{name}}##*/
+    /**{{#description}}
+     * {{{description}}}{{/description}}{{#minimum}}
+     * minimum: {{minimum}}{{/minimum}}{{#maximum}}
+     * maximum: {{maximum}}{{/maximum}}
+     **/
+    public {{{datatypeWithEnum}}} {{getter}}()
+    {
+        return this.{{name}};
+    }
+    public void {{setter}}({{{datatypeWithEnum}}} {{name}})
+    {
+        this.{{name}} = {{name}};
+    }
+    {{#isArray}}public {{{complexType}}} {{getter}}(int index)
+    {
+        return this.{{name}}.get(index);
+    }
+    public void {{setter}}(int index, {{{complexType}}} value)
+    {
+        this.{{name}}.set(index, value);
+    }
+    {{/isArray}}
+    {{/isNotDiscriminatorProperty}}{{/vars}}
+    
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class {{classname}} {\n");
+        {{#parent}}sb.append("  " + super.toString()).append("\n");{{/parent}}
+        {{#vars}}{{#isNotDiscriminatorProperty}}/*##{{name}}##*/sb.append("  {{name}}: ").append({{name}}).append("\n");
+        {{/isNotDiscriminatorProperty}}{{/vars}}
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    @Override
+    public Object clone()
+    {
+        try {
+            return super.clone();
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}

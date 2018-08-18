@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.awesley.digital</groupId>
-		<artifactId>digital-login-ms</artifactId>
-		<version>1.0-SNAPSHOT</version>
-		<relativePath>../</relativePath>
+		<groupId>org.awesley.microservice</groupId>
+		<artifactId>microservice-resource-base</artifactId>
+		<version>1.0</version>
+		<relativePath></relativePath>
 	</parent>
 	
 	<artifactId>digital-login-resource</artifactId>
@@ -13,20 +13,13 @@
 	<name>${project.groupId}:${project.artifactId}</name>
 
 	<properties>
-		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<base.package>org.awesley.digital.login</base.package>
-		<api-package>${base.package}.resources.interfaces</api-package>
-		<model-package>${base.package}.resources.models</model-package>
+		<swagger-file.groupId>org.awesley.digital</swagger-file.groupId>
 		<swagger-file.artifactId>digital-login-api</swagger-file.artifactId>
+		<swagger-file.version>1.0-SNAPSHOT</swagger-file.version>
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.awesley.microservice</groupId>
-			<artifactId>microservice-resource-base</artifactId>
-			<version>1.0</version>
-			<type>pom</type>
-		</dependency>
 		<dependency>
 			<groupId>org.awesley.digital</groupId>
 			<artifactId>digital-login-api</artifactId>
@@ -39,79 +32,20 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
-				<executions>
-					<execution>
-						<id>copy</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>${project.groupId}</groupId>
-									<artifactId>${swagger-file.artifactId}</artifactId>
-									<version>${project.version}</version>
-									<type>yaml</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}</outputDirectory>
-									<destFileName>digitalLogin.yaml</destFileName>
-								</artifactItem>
-							</artifactItems>
-							<!-- other configurations here -->
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 			    <groupId>io.swagger</groupId>
-			    <artifactId>swagger-codegen-maven-plugin</artifactId>
-			    <version>2.3.1</version>
-			    <executions>
-			        <execution>
-			            <goals>
-			                <goal>generate</goal>
-			            </goals>
-			            <configuration>
-			                <inputSpec>${project.build.directory}/digitalLogin.yaml</inputSpec>
-			                <language>jaxrs-cxf</language>
-			                <output>${project.build.directory}</output>
-			                <apiPackage>${api-package}</apiPackage>
-			                <modelPackage>${model-package}</modelPackage>
-			                <generateApiTests>false</generateApiTests>
-			                <generateModelTests>false</generateModelTests>
-			                <generateSupportingFiles>false</generateSupportingFiles>
-			                <configOptions>
-			                   <sourceFolder>src/gen/java</sourceFolder>
-			                </configOptions>
-			            </configuration>
-			        </execution>
-			    </executions>
+			    <artifactId>swagger-codegen-awes-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>add-generated-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${project.build.directory}/src/gen/java/</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>						
 		</plugins>
 	</build>

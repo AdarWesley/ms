@@ -124,7 +124,6 @@ public class DelegateInterceptionSpELTest {
 			try {
 				rb = new PropertyResourceBundle(sr);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			finally {

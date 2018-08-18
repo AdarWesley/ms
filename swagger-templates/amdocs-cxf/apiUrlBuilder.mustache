@@ -1,0 +1,75 @@
+package {{#createImplementationPackage}}{{package}}{{/createImplementationPackage}};
+
+{{#imports}}import {{import}};
+{{/imports}}
+
+import java.util.List;
+import java.util.Map;
+import javax.ws.rs.core.UriBuilder;
+import javax.inject.Named;
+import org.springframework.beans.factory.annotation.Value;
+
+import {{package}}.I{{classname}}Resource;
+
+@Named
+public class {{classname}}ResourceUrlBuilder
+{
+	@Value("${connection.{{baseName}}.{{classname}}.url}")
+	private String baseURL;
+
+{{#operations}}{{#operation}}
+{{#isHttpMethodGET}}
+	/**
+	 * @return UriBuilder for operation '{{nickname}}' without query parameters
+	 */
+	public UriBuilder {{nickname}}AsUriBuilder({{#allParams}}final {{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
+	{
+	      return UriBuilder
+	           .fromPath(baseURL)
+	           .path("{{{contextPath}}}{{{path}}}")
+	           {{#allParams}}{{#isPathParam}}.resolveTemplate("{{baseName}}", {{paramName}}){{/isPathParam}}{{/allParams}};
+	}
+	
+	/**
+	 * @return UriBuilder for operation '{{nickname}}' with query parameters
+	 */
+    public UriBuilder {{nickname}}AsUriBuilder({{#allParams}}final {{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, final Map<String, Object[]> queryParams)
+    {
+          final UriBuilder uriBuilder = {{nickname}}AsUriBuilder({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
+          if (queryParams != null) {
+                 for (Map.Entry<String, Object[]> entry : queryParams.entrySet())
+                 {
+                       uriBuilder.queryParam(entry.getKey(), entry.getValue());
+                 }
+          }
+          return uriBuilder;
+    }
+    
+	/**
+	 * @return URI string for operation '{{nickname}}' without query parameters
+	 */
+    public String {{nickname}}({{#allParams}}final {{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
+    {
+		return toString({{nickname}}AsUriBuilder({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}));
+    }
+    
+	/**
+	 * @return URI string for operation '{{nickname}}' with query parameters
+	 */
+    public String {{nickname}}({{#allParams}}final {{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, final Map<String, Object[]> queryParams)
+    {
+		return toString({{nickname}}AsUriBuilder({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, queryParams));
+    }
+{{/isHttpMethodGET}}
+{{/operation}}{{/operations}}
+
+   private final static Object [] EMPTY = new Object[0];
+   
+	/**
+	 * @return URI string for given UriBuilder object
+	 */
+	public String toString(final UriBuilder uriBuilder) {
+		return uriBuilder.build(EMPTY).toString();
+	}
+
+}

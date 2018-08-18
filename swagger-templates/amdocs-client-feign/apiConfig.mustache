@@ -1,0 +1,52 @@
+package {{package}};
+
+import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.netflix.feign.support.SpringMvcContract;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import feign.Feign;
+import feign.RequestInterceptor;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
+import feign.httpclient.ApacheHttpClient;
+import feign.Request.Options;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collection;
+
+@SuppressWarnings("unused")
+@Configuration("{{package}}.{{classname}}Config")
+public class {{classname}}Config {
+	
+	@Value("${extconnection.{{baseName}}.{{#lowercase}}{{classname}}{{/lowercase}}.url}")
+	private String serverURL;
+	
+	@Value("${lightsaber.rest-conn-timeout:10000}")
+	private int connectionTimeout;
+	
+	@Value("${lightsaber.rest-request-timeout:60000}")
+	private int requestTimeout;
+	
+	@Inject
+	protected ObjectMapper objectMapper;
+	
+	@Inject
+	protected Collection<RequestInterceptor> requestInterceptors;
+
+	
+	@Inject
+	protected Feign.Builder feignBuilder;
+	
+	@Bean(name={"{{package}}.{{classname}}"})
+	{{classname}} beanConfig{{classname}}()
+	{
+		{{classname}} connector = feignBuilder			
+			.requestInterceptors(requestInterceptors)
+			.encoder(new JacksonEncoder(objectMapper))
+			.decoder(new JacksonDecoder(objectMapper))
+			.contract(new SpringMvcContract())
+			.options(new Options(connectionTimeout, requestTimeout))
+			.target({{classname}}.class, serverURL);
+		return connector;
+	}
+}

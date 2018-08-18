@@ -46,7 +46,7 @@ public class DelegateInterceptionTest {
 	@WithMockUser(roles = {"ADMIN"})
 	public void applicativeContextIsEmptyAfterExecutionTest() {
 		IUserGetService serviceMock = Mockito.mock(IUserGetService.class);
-		Mockito.when(serviceMock.GetUser(Mockito.any())).thenReturn(mockUser);
+		Mockito.when(serviceMock.GetUser(Mockito.anyLong())).thenReturn(mockUser);
 		
 		ReflectionTestUtils.setField(userApiDelegate, UserApiImpl.class, "userGetService", serviceMock, IUserGetService.class);
 		

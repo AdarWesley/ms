@@ -1,0 +1,4 @@
+if (parameters.get{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}() == null || parameters.get{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}().isEmpty())
+{
+	parameters.set{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}(ServiceRequestContext.getContext().getLocale().toString());
+}

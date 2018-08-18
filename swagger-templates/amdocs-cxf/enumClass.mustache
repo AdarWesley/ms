@@ -1,0 +1,18 @@
+{{#description}}
+/**
+ * {{description}}
+ **/{{/description}}
+@XmlType(name="{{classname}}")
+@XmlEnum
+public enum {{classname}} implements Cloneable{{#serializableModel}}, Serializable{{/serializableModel}}
+{
+    {{#allowableValues}}{{.}}{{^-last}}, {{/-last}}{{#-last}};{{/-last}}{{/allowableValues}}
+
+    public String value() {
+        return name();
+    }
+
+    public static {{classname}} fromValue(String v) {
+        return valueOf(v);
+    }
+}

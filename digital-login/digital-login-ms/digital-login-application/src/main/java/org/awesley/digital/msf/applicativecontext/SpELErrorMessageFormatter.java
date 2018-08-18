@@ -22,7 +22,6 @@ public class SpELErrorMessageFormatter implements IErrorMessageFormatter {
 	@Autowired
 	ApplicationContext ctx;
 	
-	@Override
 	public String formatErrorMessage(JoinPointErrorContext jpec) {
 		String methodName = getMethodName(jpec);
 		
@@ -41,7 +40,6 @@ public class SpELErrorMessageFormatter implements IErrorMessageFormatter {
 		context.setVariable("args", jpec.getJoinPoint().getArgs());
 		context.setBeanResolver(new BeanResolver() {
 			
-			@Override
 			public Object resolve(EvaluationContext evalCtx, String beanName) throws AccessException {
 				return ctx.getBean(beanName);
 			}

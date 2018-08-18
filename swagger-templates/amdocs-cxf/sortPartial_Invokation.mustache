@@ -1,0 +1,7 @@
+
+		if ({{paramName}} != null && {{paramName}}.size() > 0)
+		{
+        	SortFieldParser sortFieldParser = this.applicationContext.getBean(SortFieldParser.class);
+        	SortFields sortFields = sortFieldParser.parseSortParameterValue({{paramName}});
+			serviceRequestContext.setSortFields(sortFields);
+		}

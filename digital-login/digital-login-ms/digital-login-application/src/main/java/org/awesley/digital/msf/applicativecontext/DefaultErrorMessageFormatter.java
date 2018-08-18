@@ -17,7 +17,6 @@ public class DefaultErrorMessageFormatter implements IErrorMessageFormatter {
 	@Qualifier("innerError")
 	private IErrorMessageFragment innerError;
 	
-	@Override
 	public String formatErrorMessage(JoinPointErrorContext jpec) {
 		String message = String.format("While executing %1$s on %2$s received error: %3$s", 
 				methodName.create(jpec), contextEntities.create(jpec), innerError.create(jpec));

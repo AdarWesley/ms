@@ -1,0 +1,208 @@
+package {{#createImplementationPackage}}{{package}}{{/createImplementationPackage}};
+
+{{#imports}}import {{import}};
+{{/imports}}
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import org.springframework.context.annotation.Scope;
+
+import com.amdocs.msf.server.core.serviceregistration.RestService;
+import com.amdocs.msf.server.core.validation.LsInputValidation;
+import com.amdocs.msf.server.core.context.ServiceRequestContext;
+import com.amdocs.msf.server.core.queryparameters.FilterConditions;
+import com.amdocs.msf.server.core.queryparameters.FilterParameterParser;
+import com.amdocs.msf.server.core.queryparameters.SortFields;
+import com.amdocs.msf.server.core.queryparameters.SortFieldParser;
+import com.amdocs.msf.server.core.queryparameters.PaginationInfo;
+
+import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.util.Locale;
+
+import {{package}}.I{{classname}}Resource;
+
+@RestService
+@Named
+@Scope(value = "prototype")
+public class {{classname}}Resource implements I{{classname}}Resource
+{
+    @Context
+    protected UriInfo uriInfo;
+
+    @Context
+    protected HttpServletRequest httpServletRequest;
+
+{{#operations}}{{#operation}}
+    public static class {{#paskalizeCase}}{{nickname}}{{/paskalizeCase}}Parameters
+    {
+        private HttpServletRequest httpServletRequest;
+        private UriInfo uriInfo;
+        private ServiceRequestContext serviceRequestContext;
+{{#allParams}}
+{{#isFormParam}}{{#notFile}}private {{{dataType}}} {{paramName}};
+
+        public {{{dataType}}} get{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}() {
+            return this.{{paramName}};
+        }
+        public void set{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}({{{dataType}}} {{paramName}}) {
+            this.{{paramName}} = {{paramName}};
+        }
+{{/notFile}}{{#isFile}}private java.io.InputStream {{paramName}}InputStream;
+   private org.apache.cxf.jaxrs.ext.multipart.Attachment {{paramName}}Detail;
+   
+        public java.io.InputStream get{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}InputStream() {
+            return this.{{paramName}}InputStream;
+        }
+        public void set{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}InputStream(java.io.InputStream {{paramName}}InputStream) {
+            this.{{paramName}}InputStream = {{paramName}}InputStream;
+        }
+        public org.apache.cxf.jaxrs.ext.multipart.Attachment get{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}Detail() {
+            return this.{{paramName}}Detail;
+        }
+        public void set{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}Detail(org.apache.cxf.jaxrs.ext.multipart.Attachment {{paramName}}Detail) {
+            this.{{paramName}}Detail = {{paramName}}Detail;
+        }
+   {{/isFile}}
+   
+   {{/isFormParam}}{{/allParams}}
+        {{#allParams}}
+   {{^isFormParam}}private {{{dataType}}} {{paramName}};
+        {{/isFormParam}}{{/allParams}}
+
+        {{#allParams}}{{^isFormParam}}public {{{dataType}}} get{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}() {
+            return this.{{paramName}};
+        }
+        public void set{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}({{{dataType}}} {{paramName}}) {
+            this.{{paramName}} = {{paramName}};
+        }{{/isFormParam}}
+        {{/allParams}}
+
+        public HttpServletRequest getHttpServletRequest() {
+            return httpServletRequest;
+        }
+        public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+            this.httpServletRequest = httpServletRequest;
+        }
+        public UriInfo getUriInfo() {
+            return uriInfo;
+        }
+        public void setUriInfo(UriInfo uriInfo) {
+            this.uriInfo = uriInfo;
+        }
+        public ServiceRequestContext getServiceRequestContext() {
+            return serviceRequestContext;
+        }
+        public void setServiceRequestContext(ServiceRequestContext serviceRequestContext) {
+            this.serviceRequestContext = serviceRequestContext;
+        }
+
+    }
+    public interface I{{#paskalizeCase}}{{nickname}}{{/paskalizeCase}}Delegate
+    {
+        public Response execute({{classname}}Resource.{{#paskalizeCase}}{{nickname}}{{/paskalizeCase}}Parameters parameters);
+    }
+
+	@Inject
+   	{{classname}}Resource.I{{#paskalizeCase}}{{nickname}}{{/paskalizeCase}}Delegate {{nickname}}Delegate;
+
+
+    public Response {{nickname}}({{#allParams}}{{^isFormParam}}{{vendorExtensions.x-customAnnotations}} {{{dataType}}} {{paramName}}{{/isFormParam}}{{#isFormParam}}{{#notFile}}{{{dataType}}} {{paramName}}{{/notFile}}{{#isFile}}java.io.InputStream {{paramName}}InputStream, org.apache.cxf.jaxrs.ext.multipart.Attachment {{paramName}}Detail{{/isFile}}{{/isFormParam}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
+    {
+    	try {
+			setServiceRequestContext();
+
+	        {{classname}}Resource.{{#paskalizeCase}}{{nickname}}{{/paskalizeCase}}Parameters parameters = new {{classname}}Resource.{{#paskalizeCase}}{{nickname}}{{/paskalizeCase}}Parameters();
+	        parameters.setServiceRequestContext(ServiceRequestContext.getContext());
+	
+	{{#allParams}}{{#isFormParam}}{{#notFile}}parameters.set{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}({{paramName}});{{/notFile}}{{#isFile}}parameters.set{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}InputStream({{paramName}}InputStream);
+	parameters.set{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}Detail({{paramName}}Detail);{{/isFile}}{{/isFormParam}}{{/allParams}}
+	
+	        {{#allParams}}{{^isFormParam}}parameters.set{{#paskalizeCase}}{{paramName}}{{/paskalizeCase}}({{paramName}});
+	        {{#isHeaderParam}}{{#parseCustomField}}acceptLanguage::{{paramName}}::{{>languagePartial_Invokation}}{{/parseCustomField}}{{/isHeaderParam}}
+            /* {{#parseCustomField}}sort::{{paramName}}::{{>sortPartial_Invokation}}{{/parseCustomField}}{{#parseCustomField}}filter::{{paramName}}::{{>filterPartial_Invokation}}{{/parseCustomField}} */{{/isFormParam}}
+	        {{/allParams}}
+	
+	        parameters.setHttpServletRequest(this.httpServletRequest);
+	        parameters.setUriInfo(this.uriInfo);
+	
+	        return {{nickname}}Delegate.execute(parameters);
+		}
+ 	    finally {
+			ServiceRequestContext.clearContextFromCurrentThread();
+		}
+    }
+{{/operation}}{{/operations}}
+
+	protected void setServiceRequestContext()
+	{
+		ServiceRequestContext serviceRequestContext = new ServiceRequestContext();
+		ServiceRequestContext.setContextForCurrentThread(serviceRequestContext);
+		setFilterConditionsInContext();
+		setSortParametersInContext();
+		setPaginationInfoInContext();
+		setLocaleInContext();
+	}
+	
+	@Inject
+	FilterParameterParser filterParameterParser;
+	
+	protected void setFilterConditionsInContext()
+	{
+		ServiceRequestContext serviceRequestContext = ServiceRequestContext.getContext();
+		List<String> filterParameterValues = this.uriInfo.getQueryParameters().get("filter");
+		if (filterParameterValues != null && filterParameterValues.size() > 0)
+		{
+        	FilterConditions filterConditions = filterParameterParser.parseFilterParameterValue(filterParameterValues);
+			serviceRequestContext.setFilterConditions(filterConditions);
+		}
+	}
+	
+	@Inject
+        SortFieldParser sortFieldParser;
+    
+	protected void setSortParametersInContext()
+	{
+		ServiceRequestContext serviceRequestContext = ServiceRequestContext.getContext();
+		List<String> sortParameterValues = this.uriInfo.getQueryParameters().get("sort");
+		if (sortParameterValues != null && sortParameterValues.size() > 0)
+		{
+        	SortFields sortFields = sortFieldParser.parseSortParameterValue(sortParameterValues);
+			serviceRequestContext.setSortFields(sortFields);
+		}
+	}
+	
+	protected void setPaginationInfoInContext()
+	{
+		ServiceRequestContext serviceRequestContext = ServiceRequestContext.getContext();
+		List<String> pageStart = this.uriInfo.getQueryParameters().get("start");
+		if (pageStart != null && pageStart.size() > 0)
+		{
+			PaginationInfo paginationInfo = new PaginationInfo();
+			paginationInfo.setStartIndex(Integer.parseInt(pageStart.get(0).trim()));
+			
+			List<String> pageSize = this.uriInfo.getQueryParameters().get("pageSize");
+			if (pageSize != null && pageSize.size() > 0)
+			{
+				paginationInfo.setPageSize(Integer.parseInt(pageSize.get(0).trim()));
+			}
+			
+			serviceRequestContext.setPaginationInfo(paginationInfo);
+		}
+	}
+	
+	protected void setLocaleInContext()
+	{
+		ServiceRequestContext serviceRequestContext = ServiceRequestContext.getContext();
+		Locale locale = this.httpServletRequest.getLocale();
+		serviceRequestContext.setLocale(locale);
+	}
+}

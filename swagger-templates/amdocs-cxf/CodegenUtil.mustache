@@ -1,0 +1,306 @@
+package com.amdocs.cm.swagger.codegen.common;
+
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @author KAKELLA
+ * Class to support 'sort' and 'filter' query parameter parsing in Swagger codegen
+ */
+public class CodegenUtil
+{
+    public static String delimiter = ", ";
+
+    public static String removeTrailingDelimiter(String input) {
+        return input.substring(0, input.length() - delimiter.length());
+    }
+
+    @XmlType(name="FilterOperator")
+    @XmlEnum
+    public static enum FilterOperator
+    {
+        EQUAL ("=="),
+        NOT_EQUAL ("!="),
+        CONTAINS ("=@"),
+        DOES_NOT_CONTAIN ("~@"),
+        LESS ("<"),
+        LESS_OR_EQUAL ("<="),
+        GREATER (">"),
+        GREATER_OR_EQUAL (">="),
+        REGEXP_MATCHES ("=~"),
+        REGEXP_DOES_NOT_MATCH ("!~");
+
+        private final String operator;
+
+        FilterOperator(String operator) {
+            this.operator = operator;
+        }
+
+        @JsonValue
+        public String value() {
+            return operator;
+        }
+
+        @Override
+        public String toString() {
+            return value();
+        }
+
+        public static FilterOperator getEnumByValue(String v){
+            for(FilterOperator e : FilterOperator.values()){
+                if(e.value().equals(v)) {
+                    return e;
+                }
+            }
+            return null;
+        }
+    }
+
+    @XmlRootElement(name="FilterCriterion")
+    public static class FilterCriterion /*<T extends Comparable<T>>*/
+    {
+        protected String fieldName;
+        protected FilterOperator operator;
+        protected List<String> value;
+
+
+        public String getFieldName() {
+            return fieldName;
+        }
+        public void setFieldName(String fieldName) {
+            this.fieldName = fieldName;
+        }
+        public com.amdocs.cm.swagger.codegen.common.CodegenUtil.FilterOperator getOperator() {
+            return operator;
+        }
+        public void setOperator(com.amdocs.cm.swagger.codegen.common.CodegenUtil.FilterOperator operator) {
+            this.operator = operator;
+        }
+        public List<String> getValue() {
+            return value;
+        }
+        public void setValue(List<String> value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            String values = "";
+            for (String value : getValue()) {
+                values += "\"" + value + "\", ";
+            }
+            return
+                "{\n" +
+                    "\t\"fieldName\": \""+fieldName+"\",\n" +
+                    "\t\"operator\": \""+operator+"\",\n" +
+                    "\t\"value\": [ " + values + " ]\n" +
+                "}";
+        }
+
+        public String getQueryString() {
+            String values = "";
+            for (String value : getValue()) {
+                values += "\"" + value + "\", ";
+            }
+            values = removeTrailingDelimiter(values);
+            return
+                "{ " +
+                    "\"fieldName\": \""+fieldName+"\"" + delimiter +
+                    "\"operator\": \""+operator+"\"" + delimiter +
+                    "\"value\": [ " + values + " ] " +
+                "} ";
+        }
+    }
+
+    @XmlRootElement(name="FilterCriteria")
+    public static class FilterCriteria
+    {
+        protected List<FilterCriterion> filterCriteria;
+
+        public List<FilterCriterion> getFilterCriteria() {
+            return filterCriteria;
+        }
+        public void setFilterCriteria(List<FilterCriterion> filterCriteria) {
+            this.filterCriteria = filterCriteria;
+        }
+
+        @Override
+        public String toString() {
+            return filterCriteria.toString();
+        }
+
+        public String getQueryString() {
+            if (filterCriteria == null) {
+                return "";
+            }
+
+            String output = "{ \"filterCriteria\": [ ";
+            for (FilterCriterion crit : filterCriteria) {
+                output += crit.getQueryString() + delimiter;
+            }
+            output = removeTrailingDelimiter(output) + "] }";
+
+            return output;
+        }
+    }
+
+    @XmlType(name="SortDirection")
+    @XmlEnum
+    public static enum SortDirection
+    {
+        ASC("+"), DESC("-");
+
+        private final String direction;
+
+        SortDirection(String direction) {
+            this.direction = direction;
+        }
+
+        @JsonValue
+        public String value() {
+            return direction;
+        }
+
+        @Override
+        public String toString() {
+            return value();
+        }
+
+        public static SortDirection getEnumByValue(String v){
+            for(SortDirection e : SortDirection.values()){
+                if(e.value().equals(v)) {
+                    return e;
+                }
+            }
+            return null;
+        }
+    }
+
+    @XmlRootElement(name="SortCriterion")
+    public static class SortCriterion
+    {
+        protected String fieldName;
+        protected SortDirection sortDirection = SortDirection.ASC;
+
+        public String getFieldName() {
+            return fieldName;
+        }
+        public void setFieldName(String fieldName) {
+            this.fieldName = fieldName;
+        }
+        public SortDirection getSortDirection() {
+            return sortDirection;
+        }
+        public void setSortDirection(SortDirection sortDirection) {
+            this.sortDirection = sortDirection;
+        }
+
+        @Override
+        public String toString() {
+            return sortDirection.toString() + fieldName;
+        }
+    }
+
+    @XmlRootElement(name="SortCriteria")
+    public static class SortCriteria
+    {
+        protected List<CodegenUtil.SortCriterion> sortCriteria;
+
+        public List<CodegenUtil.SortCriterion> getSortCriteria() {
+            return sortCriteria;
+        }
+        public void setSortCriteria(List<CodegenUtil.SortCriterion> sortCriteria) {
+            this.sortCriteria = sortCriteria;
+        }
+
+        @Override
+        public String toString() {
+            return sortCriteria.toString();
+        }
+
+        public void parseSortInput(List<String> sortList) {
+            sortCriteria = new ArrayList<>();
+
+            for (String sort : sortList) {
+                String normalized = sort.replaceAll("\\s", "");
+                CodegenUtil.SortCriterion crit = new CodegenUtil.SortCriterion();
+
+                if (normalized.charAt(0) == '-') {
+                    crit.setSortDirection(SortDirection.DESC);
+                    crit.setFieldName(normalized.substring(1));
+                } else if (normalized.charAt(0) == '+') {
+                    crit.setFieldName(normalized.substring(1));
+                } else {
+                    crit.setFieldName(normalized);
+                }
+
+                sortCriteria.add(crit);
+            }
+        }
+
+        public String getQueryString() {
+            if (sortCriteria == null) {
+                return "";
+            }
+
+            String output = "";
+            for (SortCriterion crit : sortCriteria) {
+                output += crit.toString() + delimiter;
+            }
+            output = removeTrailingDelimiter(output);
+
+            return output;
+        }
+    }
+
+
+    public static void main(String[] args)
+    {
+        /* Test 'filter' query param string -- START */
+        JacksonJsonProvider jacksonJsonProvider = new JacksonJsonProvider();
+        ObjectMapper mapper = jacksonJsonProvider.locateMapper(null, MediaType.APPLICATION_JSON_TYPE);
+
+        String filterString =
+                "{ \"filterCriteria\": [" +
+                    "{" +
+                        "\"fieldName\": \"field1\", " +
+                        "\"operator\": \"==\", " +
+                        "\"value\": [ \"value1\", \"value2\" ]" +
+                    "}," +
+                    "{" +
+                        "\"fieldName\": \"field2\", " +
+                        "\"operator\": \"!=\", " +
+                        "\"value\": [ \"value3\", \"value4\" ]" +
+                    "}" +
+                "] }";
+
+        CodegenUtil.FilterCriteria filterCriteria = null;
+        try {
+            filterCriteria = mapper.readValue(filterString, CodegenUtil.FilterCriteria.class);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Parsed filterCriteria: \n" + filterCriteria);
+        System.out.println("filterCriteria query string: \n" + filterCriteria.getQueryString());
+        /* Test 'filter' query param string -- END */
+
+        /* Test 'sort' query param string -- START */
+        List<String> sortList = Arrays.asList("+field1", "-field2", "field3");
+
+        CodegenUtil.SortCriteria sortCriteria = new CodegenUtil.SortCriteria();
+        sortCriteria.parseSortInput(sortList);
+        System.out.println("Parsed sortCriteria: \n" + sortCriteria);
+        System.out.println("sortCriteria query string: \n" + sortCriteria.getQueryString());
+    }
+}

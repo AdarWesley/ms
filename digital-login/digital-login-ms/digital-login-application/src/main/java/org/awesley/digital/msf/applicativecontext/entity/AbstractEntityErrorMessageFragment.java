@@ -10,7 +10,6 @@ public abstract class AbstractEntityErrorMessageFragment implements IEntityError
 	@Qualifier("default")
 	IEntityErrorMessageFragment defaultEntityErrorMessageFragment;
 	
-	@Override
 	public String create(String entityType, long entityId) {
 		return defaultEntityErrorMessageFragment.create(entityType, entityId);
 	}

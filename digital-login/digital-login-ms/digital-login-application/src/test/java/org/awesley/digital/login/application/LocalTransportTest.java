@@ -193,7 +193,7 @@ public class LocalTransportTest {
 		assertNotNull(response);
 		
 		WebClient.client(userApiClient).header("Authorization", "Bearer " + response.getToken());
-		User user = userApiClient.getUser(1L).readEntity(User.class);
+		User user = userApiClient.getUser(1L);
 		
 		assertNotNull(user);
 	}
@@ -203,7 +203,7 @@ public class LocalTransportTest {
 		request.setUsername(username);
 		request.setPassword(password);
 
-		JwtAuthenticationResponse response = authApiClient.authenticatePost(request).readEntity(JwtAuthenticationResponse.class);
+		JwtAuthenticationResponse response = authApiClient.authenticatePost(request);
 		return response;
 	}
 	

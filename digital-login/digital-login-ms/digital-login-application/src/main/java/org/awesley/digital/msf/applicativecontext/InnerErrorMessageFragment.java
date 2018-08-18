@@ -5,7 +5,6 @@ import org.awesley.digital.msf.errors.ErrorInfo;
 
 public class InnerErrorMessageFragment implements IErrorMessageFragment {
 
-	@Override
 	public String create(JoinPointErrorContext jpec) {
 		if (ApplicationException.class.isAssignableFrom(jpec.getException().getClass())) {
 			ApplicationException aex = (ApplicationException)jpec.getException();

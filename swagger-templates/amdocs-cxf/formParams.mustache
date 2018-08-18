@@ -1,0 +1,2 @@
+{{#isFormParam}}{{#notFile}}@org.apache.cxf.jaxrs.ext.multipart.Multipart(value = "{{paramName}}"{{^required}}, required = false{{/required}})  {{{dataType}}} {{paramName}}{{/notFile}}{{#isFile}} @org.apache.cxf.jaxrs.ext.multipart.Multipart(value = "{{paramName}}"{{^required}}, required = false{{/required}}) java.io.InputStream {{paramName}}InputStream,
+   @org.apache.cxf.jaxrs.ext.multipart.Multipart(value = "{{paramName}}" {{^required}}, required = false{{/required}}) org.apache.cxf.jaxrs.ext.multipart.Attachment {{paramName}}Detail{{/isFile}}{{/isFormParam}}

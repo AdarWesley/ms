@@ -15,7 +15,6 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private IUserRepository userRepository;
 
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         JpaUser user = (JpaUser)userRepository.getByUsername(username);
 

@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.awesley.microservice</groupId>
+		<artifactId>microservice-ck-base</artifactId>
+		<version>1.0</version>
+		<relativePath></relativePath>
+	</parent>
+	
+	<artifactId>digital-login-ck</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>${project.groupId}:${project.artifactId}</name>
+	
+	<properties>
+		<base.package>org.awesley.digital.login</base.package>
+		<swagger-file.groupId>org.awesley.digital</swagger-file.groupId>
+		<swagger-file.artifactId>digital-login-api</swagger-file.artifactId>
+		<swagger-file.version>1.0-SNAPSHOT</swagger-file.version>
+	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+			<plugin>
+			    <groupId>io.swagger</groupId>
+			    <artifactId>swagger-codegen-awes-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
