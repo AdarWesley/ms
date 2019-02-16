@@ -9,6 +9,7 @@
 		<relativePath></relativePath>
 	</parent>
 	
+	<groupId>org.awesley.digital</groupId>
 	<artifactId>digital-login-ck</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>

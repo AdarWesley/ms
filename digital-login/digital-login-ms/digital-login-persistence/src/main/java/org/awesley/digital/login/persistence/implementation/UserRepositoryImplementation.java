@@ -1,5 +1,6 @@
 package org.awesley.digital.login.persistence.implementation;
 
+import org.awesley.digital.login.persistence.implementation.jpa.entities.JpaUser;
 import org.awesley.digital.login.persistence.implementation.jpa.repositories.UserJpaRepository;
 import org.awesley.digital.login.service.interfaces.IUserRepository;
 import org.awesley.digital.login.service.model.User;
@@ -18,5 +19,10 @@ public class UserRepositoryImplementation implements IUserRepository {
 	@Override
 	public User getByUsername(String username) {
 		return userJpaRepository.findByUsername(username);
+	}
+
+	@Override
+	public User save(User user) {
+		return userJpaRepository.save((JpaUser)user);
 	}
 }

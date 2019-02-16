@@ -4,8 +4,8 @@ import org.awesley.digital.login.persistence.implementation.UserRepositoryImplem
 import org.awesley.digital.login.persistence.implementation.jpa.entities.JpaAuthority;
 import org.awesley.digital.login.persistence.implementation.jpa.entities.JpaUser;
 import org.awesley.digital.login.service.interfaces.IUserRepository;
-import org.awesley.digital.login.service.model.Authority;
 import org.awesley.digital.login.service.model.User;
+import org.awesley.infra.security.model.Authority;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;

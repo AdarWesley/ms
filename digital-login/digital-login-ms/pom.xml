@@ -13,9 +13,9 @@
 	<name>${project.groupId}:${project.artifactId}</name>
 
 	<modules>
-		<module>digital-login-resource</module>
-		<module>digital-login-application</module>
 		<module>digital-login-service</module>
+		<module>digital-login-resource</module>
 		<module>digital-login-persistence</module>
+		<module>digital-login-application</module>
 	</modules>
 </project>

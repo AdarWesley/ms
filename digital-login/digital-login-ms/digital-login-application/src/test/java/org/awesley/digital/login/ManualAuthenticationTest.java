@@ -1,6 +1,5 @@
 package org.awesley.digital.login;
 
-import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;

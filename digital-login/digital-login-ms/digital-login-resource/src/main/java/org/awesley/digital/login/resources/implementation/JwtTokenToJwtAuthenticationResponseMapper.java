@@ -1,10 +1,10 @@
 package org.awesley.digital.login.resources.implementation;
 
-import org.awesley.digital.login.resources.interfaces.IMapper;
+import org.awesley.digital.login.resources.interfaces.IResourceFromModelMapper;
 import org.awesley.digital.login.resources.models.JwtAuthenticationResponse;
-import org.awesley.digital.login.service.model.JwtToken;
+import org.awesley.infra.security.model.JwtToken;
 
-public class JwtTokenToJwtAuthenticationResponseMapper implements IMapper<JwtAuthenticationResponse, JwtToken> {
+public class JwtTokenToJwtAuthenticationResponseMapper implements IResourceFromModelMapper<JwtAuthenticationResponse, JwtToken> {
 
 	@Override
 	public JwtAuthenticationResponse mapFrom(JwtToken modelEntity) {

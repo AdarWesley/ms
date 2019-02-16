@@ -11,18 +11,20 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 
 import org.apache.tools.ant.filters.StringInputStream;
+import org.awesley.digital.login.config.TestConfiguration;
 import org.awesley.digital.login.persistence.implementation.jpa.entities.JpaUser;
 import org.awesley.digital.login.resources.implementation.delegate.UserApiImpl;
 import org.awesley.digital.login.resources.interfaces.UserApi;
 import org.awesley.digital.login.service.interfaces.IUserGetService;
+import org.awesley.digital.login.service.interfaces.IUserRepository;
 import org.awesley.digital.login.service.model.User;
-import org.awesley.digital.msf.applicativecontext.ApplicativeContextEntities;
-import org.awesley.digital.msf.applicativecontext.ContextEntityInfo;
-import org.awesley.digital.msf.applicativecontext.DefaultErrorMessageFormatter;
-import org.awesley.digital.msf.applicativecontext.IErrorMessageFormatter;
-import org.awesley.digital.msf.applicativecontext.SpELErrorMessageFormatter;
-import org.awesley.digital.msf.errors.ApplicationException;
-import org.awesley.digital.msf.errors.ErrorInfo;
+import org.awesley.infra.applicativecontext.ApplicativeContextEntities;
+import org.awesley.infra.applicativecontext.ContextEntityInfo;
+import org.awesley.infra.applicativecontext.DefaultErrorMessageFormatter;
+import org.awesley.infra.applicativecontext.IErrorMessageFormatter;
+import org.awesley.infra.applicativecontext.SpELErrorMessageFormatter;
+import org.awesley.infra.errors.ApplicationException;
+import org.awesley.infra.errors.ErrorInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -38,10 +40,16 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 @SuppressWarnings("unused")
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CxfServiceSpringBootApplication.class, DelegateInterceptionSpELTest.DelegateInterceptionSpELConfiguration.class 
-		}) //, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = { 
+	TestConfiguration.class, 
+	// CxfServiceSpringBootApplication.class, 
+	DelegateInterceptionSpELTest.DelegateInterceptionSpELConfiguration.class 
+}) //, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DelegateInterceptionSpELTest {
 
+	@MockBean
+	private IUserRepository userRepository;
+	
 	@Inject
 	private UserApi userApiDelegate;
 	

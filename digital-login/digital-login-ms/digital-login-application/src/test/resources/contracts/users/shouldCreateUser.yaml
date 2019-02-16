@@ -1,0 +1,20 @@
+request:
+  method: POST
+  url: /users
+  body:
+    username: "TestUser"
+    firstName: "Test"
+    lastName: "User"
+    email: "Test.User@test.com"
+    isEnabled: true
+  headers:
+    Content-Type: application/json
+response:
+  status: 201
+  body:
+    username: "TestUser"
+  matchers:
+    body:
+      - path: $
+        type: by_command
+        value: doValidate($it)

@@ -34,7 +34,7 @@ public class UserGetService implements IUserGetService, UserDetailsService {
 			public Collection<? extends GrantedAuthority> getAuthorities() {
 				return user.getAuthorities()
 						.stream()
-						.map(a -> new SimpleGrantedAuthority(a.getName().name()))
+						.map(a -> new SimpleGrantedAuthority(a.getName()))
 						.collect(Collectors.toList());
 			}
 

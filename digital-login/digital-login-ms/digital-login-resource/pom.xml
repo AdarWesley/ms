@@ -8,7 +8,9 @@
 		<relativePath></relativePath>
 	</parent>
 	
+	<groupId>org.awesley.digital</groupId>
 	<artifactId>digital-login-resource</artifactId>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>${project.groupId}:${project.artifactId}</name>
 

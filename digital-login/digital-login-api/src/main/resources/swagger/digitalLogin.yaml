@@ -17,37 +17,6 @@ tags:
   description: The User resource, accessed by its ID
 
 paths:
-
-  # Each Path Item Object describes a resource, containing a set of operations
-  # at a specified path.  The Path Item object can define parameters and 
-  # responses common all of its contained operations.
-  /users/{id}:
-    # Operations are identified by an HTTP method.  
-    get:
-      tags:
-      - User
-      description: Retrieves an instance of the resource User, having the specified id.
-      operationId: getUser
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: id
-        in: path
-        description: ID of the requested User instance
-        required: true
-        type: integer
-        format: int64
-      responses:
-        200:
-          description: Successful response, with a representation of the User resource.
-          schema:
-            # Reference to a Schema Object described in 'definitions' section
-            $ref: "#/definitions/User"
-        404:
-          description: The requested User resource instance was not found.
-
   /users:
     get:
       tags:
@@ -72,13 +41,117 @@ paths:
             $ref: "#/definitions/User"
         404:
           description: The requested User resource instance was not found.
+          
+    post:
+      tags:
+      - User
+      description: Create a new user
+      operationId: createUser
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: user
+        in: body
+        description: The user details to create
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          description: Not authorized
+          
+  /users/{id}:
+    get:
+      tags:
+      - User
+      description: Retrieves an instance of the resource User, having the specified id.
+      operationId: getUser
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID of the requested User instance
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Successful response, with a representation of the User resource.
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: The requested User resource instance was not found.
+    post:
+      tags:
+      - User
+      description: Update an existing User instance
+      operationId: updateUser
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID of the requested User instance
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Successful response, with a representation of the User resource.
+          schema:
+            # Reference to a Schema Object described in 'definitions' section
+            $ref: "#/definitions/User"
+        404:
+          description: The requested User resource instance was not found.
 
+  /users/{id}/changepassword:
+    post:
+      tags:
+      - User
+      description: Change the user password
+      operationId: changeUserPassword
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID of the requested User instance
+        required: true
+        type: integer
+        format: int64
+      - name: passwordChangeRequest
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/PasswordChangeRequest"
+      responses:
+        200:
+          description: Password change succeeded
+        401:
+          description: Permission denied
+        404:
+          description: No such user
+          
   /authenticate:
     post:
       tags:
       - Authentication
       summary: Authenticate
       description: Authenticate user by Username and Password, return JWT token upon success.
+      operationId: authenticatePost
       consumes:
       - application/json
       produces:
@@ -97,8 +170,24 @@ paths:
         401:
           description: Not authorized
 
-# The definitions section contains a set of named Schema Objects.  Each schema
-# object describes a reusable data type, which can be reference by name.
+  /publickey:
+    get:
+      tags:
+      - Authentication
+      summary: Get PublicKey of this service
+      description: Retrieve the PublicKey to use for validating JWT tokens signed by this service in UUEncoded format.
+      operationId: getPublicKey
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/JwtPublicKeyResponse"
+        403:
+          description: Invalid Operation
 
 definitions:
   User:
@@ -136,7 +225,7 @@ definitions:
         type: string
     example:
       username: "jhonsnow"
-      password: "winterIsHere"
+      password: "winterIsComing"
 
   JwtAuthenticationResponse:
     type: object
@@ -145,3 +234,24 @@ definitions:
       token:
         type: string
         
+  JwtPublicKeyResponse:
+    type: object
+    description: The public key in UUEncode format
+    properties:
+      publickey:
+        type: string
+        
+  PasswordChangeRequest:
+    type: object
+    description: Request to change a user password.
+    properties:
+      username:
+        type: string
+      oldpassword:
+        type: string
+      newpassword:
+        type: string
+    example:
+      username: johnsnow
+      oldpassword: winterIsComing
+      newpassword: winterIsHere

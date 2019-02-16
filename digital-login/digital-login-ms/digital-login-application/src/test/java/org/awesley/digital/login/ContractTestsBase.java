@@ -1,6 +1,6 @@
 package org.awesley.digital.login;
 
-import static org.mockito.BDDMockito.given;
+//import static org.mockito.BDDMockito.given;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -8,21 +8,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import javax.sql.DataSource;
+import javax.inject.Provider;
 
 import org.apache.cxf.Bus;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 import org.apache.cxf.message.Message;
-import org.awesley.digital.login.application.CxfServiceSpringBootApplication;
+import org.awesley.digital.login.config.TestConfiguration;
 import org.awesley.digital.login.persistence.implementation.jpa.entities.JpaAuthority;
 import org.awesley.digital.login.persistence.implementation.jpa.entities.JpaUser;
 import org.awesley.digital.login.resources.interfaces.AuthenticationApi;
 import org.awesley.digital.login.resources.interfaces.UserApi;
 import org.awesley.digital.login.service.interfaces.IUserRepository;
-import org.awesley.digital.login.service.model.AuthorityName;
+import org.awesley.infra.security.JwtTokenUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -30,21 +31,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.TestExecutionListeners.MergeMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.google.common.base.Strings;
 
 import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CxfServiceSpringBootApplication.class, ContractTestsBase.LocalTransportConfiguration.class 
-		}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+	// classes = { 
+			//TestConfiguration.class
+			//, CxfServiceSpringBootApplication.class 
+			// , ContractTestsBase.LocalTransportConfiguration.class 
+	//}, 
+	webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = { TestConfiguration.class })
+@TestExecutionListeners(value = { ContractTestsExecutionListener.class }, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 public class ContractTestsBase {
 
 	// private final static String ENDPOINT_ADDRESS = "local://services";
@@ -63,6 +72,9 @@ public class ContractTestsBase {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
+	private Provider<JwtTokenUtil> jwtTokenUtil;
+	
+	@Autowired
 	private void setUserApi(UserApi userApi){
 		ContractTestsBase.userApi = userApi;
 	}
@@ -76,15 +88,6 @@ public class ContractTestsBase {
 	
 	private static AuthenticationApi authenticationApi;
 	
-//	@BeforeClass
-//	public static void SetupClass() {
-////		initProviders();
-////	    startServer();
-//
-//		//initDatabase();
-//		
-//	}
-//	
 	private void initProviders() {
 		providers = new ArrayList<Object>();
 		JacksonJsonProvider jsonProvider = new JacksonJsonProvider();
@@ -120,6 +123,32 @@ public class ContractTestsBase {
 		server = sf.create();
 	}
 
+	private RequestSpecification testRequestSpecification;
+	private String authenticatedIdentityToken;
+	private ContractTestHelper contractTestHelper;
+	
+	public ContractTestHelper getContractTestHelper() {
+		return this.contractTestHelper;
+	}
+	
+	public void setContractTestsHelper(ContractTestHelper contractTestHelper) {
+		this.contractTestHelper = contractTestHelper;
+	}
+
+	public String getAuthenticatedIdentityToken() {
+		return Strings.isNullOrEmpty(authenticatedIdentityToken) ? 
+				jwtTokenUtil.get().generateToken("TestUser", Arrays.asList(new JpaAuthority("ROLE_USER"))) :
+				authenticatedIdentityToken;
+	}
+
+	public void setAuthenticatedIdentityToken(String authenticatedIdentityToken) {
+		this.authenticatedIdentityToken = authenticatedIdentityToken;
+	}
+
+	public RequestSpecification given() {
+		return testRequestSpecification;
+	}
+	
 	@Before
 	public void BeforeTest() {
 		initProviders();
@@ -129,14 +158,18 @@ public class ContractTestsBase {
 	    		"http://localhost:" + 
 	    		port + 
 	    		"/services";
-		
-		JpaUser testUser = createUserAndSave(1L, "TestUser", "Test", "User", "test.user@test.com",
-				Arrays.asList(new JpaAuthority(AuthorityName.ROLE_USER)));
-		given(userRepository.getByUsername("TestUser")).willReturn(testUser);
-		given(userRepository.getById(1L)).willReturn(testUser);
+	    
+	    testRequestSpecification = RestAssured.given();
+	    
+	    testRequestSpecification.header("Authorization", "Bearer " + getAuthenticatedIdentityToken());
 
-		given(userRepository.getByUsername("AdminUser")).willReturn(createUserAndSave(2L, "AdminUser", "Admin", "User",
-				"admin.user@test.com", Arrays.asList(new JpaAuthority(AuthorityName.ROLE_ADMIN))));
+		JpaUser testUser = createUserAndSave(1L, "TestUser", "Test", "User", "test.user@test.com",
+				Arrays.asList(new JpaAuthority("ROLE_USER")));
+		org.mockito.BDDMockito.given(userRepository.getByUsername("TestUser")).willReturn(testUser);
+		org.mockito.BDDMockito.given(userRepository.getById(1L)).willReturn(testUser);
+
+		org.mockito.BDDMockito.given(userRepository.getByUsername("AdminUser")).willReturn(createUserAndSave(2L, "AdminUser", "Admin", "User",
+				"admin.user@test.com", Arrays.asList(new JpaAuthority("ROLE_ADMIN"))));
 	}
 
 	private JpaUser createUserAndSave(long id, String username, String firstname, String lastname, String email,
@@ -159,6 +192,13 @@ public class ContractTestsBase {
 		return user;
 	}
 	
+	public void doValidate(Map<String, Object> response) throws Exception {
+		System.out.println(response);
+		if (contractTestHelper != null) {
+			contractTestHelper.doValidate(response);
+		}
+	}
+	
 	@After
 	public void destroy() throws Exception {
 	   server.stop();
@@ -166,7 +206,7 @@ public class ContractTestsBase {
 	   providers = null;
 	}
 
-	@Configuration
+	/*@Configuration
 	static class LocalTransportConfiguration {
 		
 		@Bean
@@ -179,5 +219,5 @@ public class ContractTestsBase {
 			dataSource.setDriverClassName("org.h2.Driver");
 			return dataSource;
 		}
-	}	
+	}*/	
 }

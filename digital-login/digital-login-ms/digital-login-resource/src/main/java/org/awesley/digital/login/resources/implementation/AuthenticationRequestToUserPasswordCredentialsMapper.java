@@ -1,11 +1,11 @@
 package org.awesley.digital.login.resources.implementation;
 
-import org.awesley.digital.login.resources.interfaces.IMapper;
+import org.awesley.digital.login.resources.interfaces.IResourceFromModelMapper;
 import org.awesley.digital.login.resources.models.JwtAuthenticationRequest;
 import org.awesley.digital.login.service.model.UserPasswordCredentials;
 
 public class AuthenticationRequestToUserPasswordCredentialsMapper implements 
-	IMapper<org.awesley.digital.login.service.model.UserPasswordCredentials, JwtAuthenticationRequest> {
+	IResourceFromModelMapper<org.awesley.digital.login.service.model.UserPasswordCredentials, JwtAuthenticationRequest> {
 
 	@Override
 	public UserPasswordCredentials mapFrom(JwtAuthenticationRequest request) {

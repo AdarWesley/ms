@@ -2,6 +2,8 @@ package org.awesley.digital.login.service.model;
 import java.util.Date;
 import java.util.List;
 
+import org.awesley.infra.security.model.Authority;
+
 public interface User {
 
 	Long getId();

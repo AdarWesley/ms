@@ -7,14 +7,17 @@
 	</configSuffixes>
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
-		<config>java:org.awesley.digital.msf.applicativecontext.ApplicativeContextConfiguration</config>
-		<config>java:org.awesley.digital.login.application.security.JwtAuthenticationEntryPoint</config>
 		<config>java:org.awesley.digital.login.application.LocalTransportTest$LocalTransportConfiguration</config>
 		<config>java:org.awesley.digital.login.ContractTestsBase$LocalTransportConfiguration</config>
 		<config>java:org.awesley.digital.login.application.security.config.WebSecurityConfig</config>
+		<config>java:org.awesley.infra.applicativecontext.ApplicativeContextConfiguration</config>
 	</configs>
 	<autoconfigs>
 		<config>java:org.awesley.digital.login.application.CxfServiceSpringBootApplication</config>
+		<config>java:org.awesley.digital.login.application.DelegateInterceptionSpELTest$DelegateInterceptionSpELConfiguration</config>
+		<config>java:org.awesley.digital.login.application.AppLayersConfiguration</config>
+		<config>java:org.awesley.digital.login.application.DelegateInterceptionTest$DelegateInterceptionConfiguration</config>
+		<config>java:org.awesley.digital.login.application.CxfAppConfiguration</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

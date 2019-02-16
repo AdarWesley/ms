@@ -4,20 +4,21 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.awesley.digital.login.service.model.Authority;
 import org.awesley.digital.login.service.model.User;
+import org.awesley.infra.security.model.Authority;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "APPUSER")
 public class JpaUser implements User {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    //@SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "USERNAME", length = 50, unique = true)

@@ -2,11 +2,14 @@ package org.awesley.digital.login.service.implementation;
 
 import java.util.stream.Collectors;
 
+import javax.inject.Provider;
+
 import org.awesley.digital.login.service.interfaces.IAuthenticationService;
 import org.awesley.digital.login.service.interfaces.IUserRepository;
-import org.awesley.digital.login.service.model.JwtToken;
 import org.awesley.digital.login.service.model.User;
 import org.awesley.digital.login.service.model.UserPasswordCredentials;
+import org.awesley.infra.security.JwtTokenUtil;
+import org.awesley.infra.security.model.JwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +25,7 @@ public class AuthenticationService implements IAuthenticationService {
     private IUserRepository userRepository;
     
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private Provider<JwtTokenUtil> jwtTokenUtil;
 
 	@Override
 	public JwtToken authenticate(UserPasswordCredentials credentials) {
@@ -35,12 +38,12 @@ public class AuthenticationService implements IAuthenticationService {
         		new PreAuthenticatedAuthenticationToken(user.getUsername(), null,
         				user.getAuthorities()
         					.stream()
-        					.map(a -> new SimpleGrantedAuthority(a.getName().name()))
+        					.map(a -> new SimpleGrantedAuthority(a.getName()))
         					.collect(Collectors.toList()));
         
         SecurityContextHolder.getContext().setAuthentication(authenticatedAuthentication);
 
-         final String token = jwtTokenUtil.generateToken(user.getUsername(), user.getAuthorities());
+         final String token = jwtTokenUtil.get().generateToken(user.getUsername(), user.getAuthorities());
 
         return new JwtToken(token);
 	}

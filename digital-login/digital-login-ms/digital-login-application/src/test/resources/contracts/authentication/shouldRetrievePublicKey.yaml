@@ -1,0 +1,16 @@
+request:
+  method: GET
+  url: /publickey
+  headers:
+    Content-Type: application/json
+response:
+  status: 200
+  body:
+    publickey: encodedPublicKey
+  headers:
+    Content-Type: application/json
+  matchers:
+    body:
+      - path: $.['publickey']
+        type: by_regex
+        value: "^[A-Za-z0-9+/=]+$"
