@@ -5,4 +5,5 @@ EXPOSE 8080
 EXPOSE 8000
 #RUN sh -c 'touch /app.jar'
 ENV JAVA_OPTS="-Xdebug"
-ENTRYPOINT [ "/bin/bash", "-c", "java $JAVA_OPTS -jar /app.jar" ]
+#ENV ENV="/etc/profile"
+ENTRYPOINT [ "/bin/bash", "-l", "-c", "java $JAVA_OPTS -jar /app.jar" ]

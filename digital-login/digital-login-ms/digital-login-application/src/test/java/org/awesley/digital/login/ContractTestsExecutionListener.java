@@ -12,7 +12,7 @@ import org.springframework.test.context.support.TestPropertySourceUtils;
 public class ContractTestsExecutionListener extends AbstractTestExecutionListener {
 
 	ConfigurableApplicationContext ctx;
-	ContractTestHelper contractTestHelper;
+	ContractTestHelper<?> contractTestHelper;
 	
 	@Override
 	public void beforeTestClass(TestContext testContext) throws Exception {
@@ -25,7 +25,6 @@ public class ContractTestsExecutionListener extends AbstractTestExecutionListene
 	@Override
 	public void prepareTestInstance(TestContext testContext) throws Exception {
 		if (contractTestHelper != null) {
-			((ContractTestsBase)testContext.getTestInstance()).setContractTestsHelper(contractTestHelper);
 			contractTestHelper.prepareTestInstance(this, testContext);
 		}
 	}
@@ -55,7 +54,7 @@ public class ContractTestsExecutionListener extends AbstractTestExecutionListene
 		ctx = (ConfigurableApplicationContext)testContext.getApplicationContext();
 		String beanName = testContext.getTestClass().getName() + "Helper";
 		if (ctx.containsBean(beanName)) {
-			contractTestHelper = (ContractTestHelper)ctx.getBean(beanName);
+			contractTestHelper = (ContractTestHelper<?>)ctx.getBean(beanName);
 		}
 		
 		if (contractTestHelper != null) {

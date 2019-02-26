@@ -4,16 +4,31 @@ import java.util.Map;
 
 import org.springframework.test.context.TestContext;
 
-public abstract class AbstractContractTestHelper implements ContractTestHelper {
+public abstract class AbstractContractTestHelper<BASETESTType extends SupportsTestHelper<BASETESTType>> 
+	implements ContractTestHelper<BASETESTType> {
+
+	private BASETESTType testInstance;
 
 	@Override
 	public void beforeTestClass(ContractTestsExecutionListener executionListener, TestContext testContext) throws Exception {
 		/* no-op */
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void prepareTestInstance(ContractTestsExecutionListener executionListener, TestContext testContext) throws Exception {
-		/* no-op */
+		((BASETESTType)testContext.getTestInstance()).setContractTestsHelper(this);
+		this.setTestInstance((BASETESTType)testContext.getTestInstance());
+	}
+
+	@Override
+	public void setTestInstance(BASETESTType testInstance) {
+		this.testInstance = testInstance;
+	}
+
+	@Override
+	public BASETESTType getTestInstance() {
+		return testInstance;
 	}
 
 	@Override

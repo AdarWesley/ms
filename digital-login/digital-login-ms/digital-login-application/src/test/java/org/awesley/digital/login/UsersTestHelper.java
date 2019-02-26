@@ -9,7 +9,7 @@ import org.awesley.infra.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestContext;
 
-public class UsersTestHelper extends AbstractContractTestHelper {
+public class UsersTestHelper extends AbstractContractTestHelper<ContractTestsBase> {
 
 	@Autowired
 	private Provider<JwtTokenUtil> jwtTokenUtil;

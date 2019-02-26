@@ -54,7 +54,7 @@ import io.restassured.specification.RequestSpecification;
 	webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(value = { ContractTestsExecutionListener.class }, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
-public class ContractTestsBase {
+public class ContractTestsBase implements SupportsTestHelper<ContractTestsBase> {
 
 	// private final static String ENDPOINT_ADDRESS = "local://services";
     @LocalServerPort
@@ -125,13 +125,13 @@ public class ContractTestsBase {
 
 	private RequestSpecification testRequestSpecification;
 	private String authenticatedIdentityToken;
-	private ContractTestHelper contractTestHelper;
+	private ContractTestHelper<ContractTestsBase> contractTestHelper;
 	
-	public ContractTestHelper getContractTestHelper() {
+	public ContractTestHelper<ContractTestsBase> getContractTestHelper() {
 		return this.contractTestHelper;
 	}
 	
-	public void setContractTestsHelper(ContractTestHelper contractTestHelper) {
+	public void setContractTestsHelper(ContractTestHelper<ContractTestsBase> contractTestHelper) {
 		this.contractTestHelper = contractTestHelper;
 	}
 
