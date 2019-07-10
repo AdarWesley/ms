@@ -29,7 +29,6 @@ import org.springframework.boot.test.autoconfigure.OverrideAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
-import org.springframework.test.context.support.AbstractTestExecutionListener;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration(exclude = {

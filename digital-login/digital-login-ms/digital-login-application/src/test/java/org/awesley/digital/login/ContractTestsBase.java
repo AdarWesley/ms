@@ -20,9 +20,12 @@ import org.apache.cxf.message.Message;
 import org.awesley.digital.login.config.TestConfiguration;
 import org.awesley.digital.login.persistence.implementation.jpa.entities.JpaAuthority;
 import org.awesley.digital.login.persistence.implementation.jpa.entities.JpaUser;
-import org.awesley.digital.login.resources.interfaces.AuthenticationApi;
 import org.awesley.digital.login.resources.interfaces.UserApi;
+import org.awesley.digital.login.resources.interfaces.AuthenticationApi;
 import org.awesley.digital.login.service.interfaces.IUserRepository;
+import org.awesley.infra.contracttesting.ContractTestHelper;
+import org.awesley.infra.contracttesting.ContractTestsExecutionListener;
+import org.awesley.infra.contracttesting.SupportsTestHelper;
 import org.awesley.infra.security.JwtTokenUtil;
 import org.junit.After;
 import org.junit.Before;
@@ -127,14 +130,6 @@ public class ContractTestsBase implements SupportsTestHelper<ContractTestsBase> 
 	private String authenticatedIdentityToken;
 	private ContractTestHelper<ContractTestsBase> contractTestHelper;
 	
-	public ContractTestHelper<ContractTestsBase> getContractTestHelper() {
-		return this.contractTestHelper;
-	}
-	
-	public void setContractTestsHelper(ContractTestHelper<ContractTestsBase> contractTestHelper) {
-		this.contractTestHelper = contractTestHelper;
-	}
-
 	public String getAuthenticatedIdentityToken() {
 		return Strings.isNullOrEmpty(authenticatedIdentityToken) ? 
 				jwtTokenUtil.get().generateToken("TestUser", Arrays.asList(new JpaAuthority("ROLE_USER"))) :
@@ -204,6 +199,16 @@ public class ContractTestsBase implements SupportsTestHelper<ContractTestsBase> 
 	   server.stop();
 	   server.destroy();
 	   providers = null;
+	}
+
+	@Override
+	public ContractTestHelper<ContractTestsBase> getContractTestHelper() {
+		return this.contractTestHelper;
+	}
+
+	@Override
+	public void setContractTestsHelper(ContractTestHelper<ContractTestsBase> contractTestHelper) {
+		this.contractTestHelper = contractTestHelper;
 	}
 
 	/*@Configuration

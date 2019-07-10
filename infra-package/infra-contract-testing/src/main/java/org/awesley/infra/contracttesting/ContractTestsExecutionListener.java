@@ -1,4 +1,4 @@
-package org.awesley.digital.login;
+package org.awesley.infra.contracttesting;
 
 import java.util.ArrayList;
 import java.util.List;

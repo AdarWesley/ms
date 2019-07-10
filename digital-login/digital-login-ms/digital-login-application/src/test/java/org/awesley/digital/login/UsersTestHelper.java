@@ -5,6 +5,8 @@ import java.util.Arrays;
 import javax.inject.Provider;
 
 import org.awesley.digital.login.persistence.implementation.jpa.entities.JpaAuthority;
+import org.awesley.infra.contracttesting.AbstractContractTestHelper;
+import org.awesley.infra.contracttesting.ContractTestsExecutionListener;
 import org.awesley.infra.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestContext;

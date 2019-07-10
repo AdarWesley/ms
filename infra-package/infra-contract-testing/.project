@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>digital-login-application</name>
+	<name>infra-contract-testing</name>
 	<comment></comment>
 	<projects>
-		<project>digital-login-persistence</project>
-		<project>digital-login-resource</project>
-		<project>digital-login-service</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,5 +1,6 @@
 package org.awesley.digital.login;
 
+import org.awesley.infra.contracttesting.AbstractContractTestHelper;
 import org.springframework.test.context.TestPropertySource;
 
 @TestPropertySource(properties = {
