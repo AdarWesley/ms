@@ -1,0 +1,20 @@
+request:
+  method: POST
+  url: /shoppingList
+  body:
+    name: ShoppingList Name
+  headers:
+    Content-Type: application/json
+response:
+  status: 201
+  body:
+    id: entity_id
+    name: entity_name
+  matchers:
+    body:
+      - path: $.id
+        type: by_regex
+        predefined: non_empty
+      - path: $.name
+        type: by_regex
+        predefined: non_empty
