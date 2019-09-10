@@ -15,11 +15,16 @@
 	<packaging>jar</packaging>
 	<name>${project.groupId}:${project.artifactId}</name>
 
-	<!-- <dependencies>
+	<dependencies>
 		<dependency>
 			<groupId>org.awesley.digital</groupId>
-			<artifactId>other-service-ck</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>shoppinglist-service</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-	</dependencies> -->
+		<dependency>
+			<groupId>org.awesley.digital</groupId>
+			<artifactId>usergroup-ck</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

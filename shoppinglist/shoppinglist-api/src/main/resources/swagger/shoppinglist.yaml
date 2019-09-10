@@ -133,7 +133,38 @@ paths:
             $ref: "#/definitions/ShoppingList"
         404:
           description: The requested ShoppingList resource instance was not found.
-     
+
+  /shoppingList/{id}/groups:
+    post:
+      tags:
+      - ShoppingList
+      description: Associate a group to the shoppingList identified by id.  This group of people will have access to the shopping list.
+      operationId: associateGroup
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: id
+        description: ID of the ShoppingList instance to be updated
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        description: A name of a user group to associate with the shopping list.
+        required: true
+        name: groupName
+        schema:
+          type: string
+      responses:
+        200:
+          description: user group was successfully associated with shopping list.
+          schema:
+            $ref: "#/definitions/ShoppingList"
+        404:
+          description: The requested ShoppingList resource instance was not found.
+
 definitions:
   ShoppingList:
     type: object
@@ -143,4 +174,17 @@ definitions:
         type: integer
         format: int64
       name:
+        type: string
+      groups:
+        type: array
+        items:
+          $ref: "#/definitions/UsersGroup"
+  UsersGroup:
+    type: object
+    description: A group of users.
+    properties:
+      groupId:
+        type: integer
+        format: int64
+      groupName:
         type: string

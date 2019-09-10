@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.awesley.digital.shoppinglist.config.TestConfiguration;
 import org.awesley.digital.shoppinglist.persistence.implementation.jpa.entities.JpaShoppingList;
 import org.awesley.digital.shoppinglist.resources.models.ShoppingList;
-import org.awesley.digital.shoppinglist.service.interfaces.IShoppingListRepository;
+import org.awesley.digital.shoppinglist.service.interfaces.repository.IShoppingListRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

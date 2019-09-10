@@ -11,7 +11,8 @@ import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 import org.apache.cxf.message.Message;
 import org.awesley.digital.shoppinglist.config.TestConfiguration;
 import org.awesley.digital.shoppinglist.resources.interfaces.ShoppingListApi;
-import org.awesley.digital.shoppinglist.service.interfaces.IShoppingListRepository;
+import org.awesley.digital.shoppinglist.service.interfaces.repository.IShoppingListRepository;
+import org.awesley.digital.shoppinglist.service.model.GroupRef;
 import org.awesley.digital.shoppinglist.service.model.ShoppingList;
 import org.awesley.infra.security.JwtTokenUtil;
 import org.awesley.infra.security.model.JwtAuthority;
@@ -24,11 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Any;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
@@ -39,6 +40,7 @@ import io.restassured.specification.RequestSpecification;
 	//, CxfServiceSpringBootApplication.class 
 	// , ContractTestsBase.LocalTransportConfiguration.class 
 }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureStubRunner(ids = { "org.awesley.digital:usergroup-application:+:stubs" })
 public class ContractTestsBase {
 
 	// private final static String ENDPOINT_ADDRESS = "local://services";
@@ -116,6 +118,8 @@ public class ContractTestsBase {
 			@Override public void setID(Long id) {}
 			@Override public String getName() {	return "TestUser"; }
 			@Override public void setName(String name) {}
+			@Override public List<? extends GroupRef> getUserGroups() { return null; }
+			@Override public void setUserGroups(List<? extends GroupRef> groups) {}
 		};
 			
 		org.mockito.BDDMockito.given(shoppingListRepository.getById(1L)).willReturn(shoppingList);

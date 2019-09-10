@@ -8,8 +8,9 @@ import javax.ws.rs.core.Response.Status;
 
 import org.awesley.digital.shoppinglist.resources.interfaces.ShoppingListApi;
 import org.awesley.digital.shoppinglist.resources.models.ShoppingList;
-import org.awesley.digital.shoppinglist.service.interfaces.IShoppingListCreateService;
-import org.awesley.digital.shoppinglist.service.interfaces.IShoppingListGetService;
+import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListAssociateGroupService;
+import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListCreateService;
+import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListGetService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ShoppingListApiImpl implements ShoppingListApi {
@@ -19,6 +20,9 @@ public class ShoppingListApiImpl implements ShoppingListApi {
 	
 	@Autowired
 	private IShoppingListCreateService shoppingListCreateService;
+	
+	@Autowired
+	private IShoppingListAssociateGroupService shoppingListAssociateGroupService;
 	
 	@Autowired
 	private IResourceFromModelMapper<ShoppingList, org.awesley.digital.shoppinglist.service.model.ShoppingList> shoppingListResourceFromModelMapper;
@@ -50,5 +54,14 @@ public class ShoppingListApiImpl implements ShoppingListApi {
 	public Response updateShoppingList(Long id, ShoppingList shoppingList) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Response associateGroup(Long id, String groupName) {
+		org.awesley.digital.shoppinglist.service.model.ShoppingList modelShoppingList = shoppingListGetService.GetShoppingList(id);
+		org.awesley.digital.shoppinglist.service.model.ShoppingList updatedShoppingList = 
+				shoppingListAssociateGroupService.associateGroup(modelShoppingList, groupName);
+		ShoppingList shoppingList = shoppingListResourceFromModelMapper.mapFrom(updatedShoppingList);
+		return Response.status(Status.OK).entity(shoppingList).build();
 	}
 }

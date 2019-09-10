@@ -1,4 +1,4 @@
-package org.awesley.digital.shoppinglist.service.interfaces;
+package org.awesley.digital.shoppinglist.service.interfaces.repository;
 
 import org.awesley.digital.shoppinglist.service.model.ShoppingList;
 

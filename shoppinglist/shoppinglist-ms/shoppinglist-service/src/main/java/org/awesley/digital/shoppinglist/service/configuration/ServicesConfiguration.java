@@ -1,11 +1,13 @@
 package org.awesley.digital.shoppinglist.service.configuration;
 
+import org.awesley.digital.shoppinglist.service.implementation.ShoppingListAssociateGroupService;
 import org.awesley.digital.shoppinglist.service.implementation.ShoppingListCreateService;
 import org.awesley.digital.shoppinglist.service.implementation.ShoppingListFindService;
 import org.awesley.digital.shoppinglist.service.implementation.ShoppingListGetService;
-import org.awesley.digital.shoppinglist.service.interfaces.IShoppingListCreateService;
-import org.awesley.digital.shoppinglist.service.interfaces.IShoppingListFindService;
-import org.awesley.digital.shoppinglist.service.interfaces.IShoppingListGetService;
+import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListAssociateGroupService;
+import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListCreateService;
+import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListFindService;
+import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListGetService;
 import org.awesley.infra.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +29,11 @@ public class ServicesConfiguration {
 	@Bean
 	public IShoppingListCreateService shoppingListCreateService() {
 		return new ShoppingListCreateService();
+	}
+	
+	@Bean
+	public IShoppingListAssociateGroupService shoppingListAssociateGroupService() {
+		return new ShoppingListAssociateGroupService();
 	}
 	
 	@Bean

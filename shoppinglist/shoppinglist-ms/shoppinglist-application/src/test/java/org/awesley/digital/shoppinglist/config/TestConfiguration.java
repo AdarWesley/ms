@@ -1,11 +1,15 @@
 package org.awesley.digital.shoppinglist.config;
 
+import java.util.List;
+
+import org.awesley.digital.gateway.config.GatewayConfiguration;
 import org.awesley.digital.shoppinglist.application.CxfAppConfiguration;
 import org.awesley.digital.shoppinglist.application.JWTAuthorizationRequestInterceptor;
 import org.awesley.digital.shoppinglist.application.security.config.WebSecurityConfig;
 import org.awesley.digital.shoppinglist.config.TestConfiguration.ShoppingListTest;
 import org.awesley.digital.shoppinglist.resources.configuration.ResourcesConfiguration;
 import org.awesley.digital.shoppinglist.service.configuration.ServicesConfiguration;
+import org.awesley.digital.shoppinglist.service.model.GroupRef;
 import org.awesley.digital.shoppinglist.service.model.ShoppingList;
 import org.awesley.infra.applicativecontext.ApplicativeContextConfiguration;
 import org.springframework.boot.SpringBootConfiguration;
@@ -47,6 +51,7 @@ import org.springframework.context.annotation.Import;
 		WebSecurityConfig.class,
 		ResourcesConfiguration.class, 
 		ServicesConfiguration.class,
+		GatewayConfiguration.class,
 		// PersistenceConfiguration.class,
 		ApplicativeContextConfiguration.class
 })
@@ -66,6 +71,7 @@ public class TestConfiguration {
 
 		long id;
 		String name;
+		List<? extends GroupRef> groups;
 		
 		@Override
 		public Long getID() {
@@ -85,6 +91,16 @@ public class TestConfiguration {
 		@Override
 		public void setName(String name) {
 			this.name = name;
+		}
+
+		@Override
+		public List<? extends GroupRef> getUserGroups() {
+			return groups;
+		}
+
+		@Override
+		public void setUserGroups(List<? extends GroupRef> groups) {
+			this.groups = groups;
 		}
 
 	}

@@ -1,0 +1,30 @@
+request:
+  method: POST
+  url: /shoppingList/1/groups
+  body:
+    groupName: Group Name
+  headers:
+    Content-Type: application/json
+response:
+  status: 201
+  body:
+    id: 1
+    name: ShoppingList1
+    groups:
+      - groupId: 1
+        groupName: Group Name
+  matchers:
+    body:
+      - path: $.id
+        type: by_regex
+        predefined: non_empty
+      - path: $.name
+        type: by_regex
+        predefined: non_empty
+      - path: $.groups
+        type: by_type
+        minOccurrence: 1
+      - path: $.groups[0].groupId
+        type: by_equality
+      - path: $.groups[0].groupName
+        type: by_equality
