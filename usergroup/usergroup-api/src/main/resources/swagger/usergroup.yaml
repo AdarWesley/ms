@@ -4,7 +4,7 @@ info:
   description: usergroup REST API definition
   version: 1.0.0
   title: usergroup
-basePath: /api
+basePath: /usergroup-service
 schemes:
 - http
 

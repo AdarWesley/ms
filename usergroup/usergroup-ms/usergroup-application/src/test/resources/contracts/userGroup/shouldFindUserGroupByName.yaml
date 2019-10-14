@@ -1,19 +1,19 @@
 request:
   method: GET
-  url: /usergroup-service/userGroup/1
+  url: /usergroup-service/userGroup?filter=name%3DGroup1&startIndex=0&pageSize=1
   body:
   headers:
     Content-Type: application/json
 response:
   status: 200
   body:
-    id: entity_id
-    name: entity_name
+    id: 1
+    name: Group1
   matchers:
     body:
       - path: $.id
         type: by_regex
-        predefined: non_empty
+        predefined: number
       - path: $.name
         type: by_regex
         predefined: non_empty

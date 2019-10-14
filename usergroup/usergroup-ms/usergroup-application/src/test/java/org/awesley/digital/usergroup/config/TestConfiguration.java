@@ -1,5 +1,6 @@
 package org.awesley.digital.usergroup.config;
 
+import org.awesley.digital.usergroup.UserGroupTestHelper;
 import org.awesley.digital.usergroup.application.CxfAppConfiguration;
 import org.awesley.digital.usergroup.application.JWTAuthorizationRequestInterceptor;
 import org.awesley.digital.usergroup.application.security.config.WebSecurityConfig;
@@ -8,6 +9,7 @@ import org.awesley.digital.usergroup.resources.configuration.ResourcesConfigurat
 import org.awesley.digital.usergroup.service.configuration.ServicesConfiguration;
 import org.awesley.digital.usergroup.service.model.UserGroup;
 import org.awesley.infra.applicativecontext.ApplicativeContextConfiguration;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration;
@@ -22,6 +24,7 @@ import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration(exclude = {
@@ -58,6 +61,7 @@ public class TestConfiguration {
 	}
 	
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public UserGroup userGroup() {
 		return new UserGroupTest(); 
 	}
@@ -89,4 +93,9 @@ public class TestConfiguration {
 
 	}
 
+	@Bean("org.awesley.digital.usergroup.UserGroupTestHelper")
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public UserGroupTestHelper userGroupTestHelper() {
+		return new UserGroupTestHelper();
+	}
 }
