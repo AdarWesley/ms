@@ -3,10 +3,14 @@ package org.awesley.digital.shoppinglist.resources.implementation.delegate;
 import org.awesley.digital.shoppinglist.resources.interfaces.IResourceFromModelMapper;
 import org.awesley.digital.shoppinglist.resources.interfaces.IResourceToModelMapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.awesley.digital.shoppinglist.resources.interfaces.ShoppingListApi;
+import org.awesley.digital.shoppinglist.resources.models.GroupName;
 import org.awesley.digital.shoppinglist.resources.models.ShoppingList;
 import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListAssociateGroupService;
 import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListCreateService;
@@ -57,11 +61,13 @@ public class ShoppingListApiImpl implements ShoppingListApi {
 	}
 
 	@Override
-	public Response associateGroup(Long id, String groupName) {
+	public Response associateGroup(Long id, GroupName groupName) {
 		org.awesley.digital.shoppinglist.service.model.ShoppingList modelShoppingList = shoppingListGetService.GetShoppingList(id);
+		
 		org.awesley.digital.shoppinglist.service.model.ShoppingList updatedShoppingList = 
-				shoppingListAssociateGroupService.associateGroup(modelShoppingList, groupName);
+				shoppingListAssociateGroupService.associateGroup(modelShoppingList, groupName.getGroupName());
+		
 		ShoppingList shoppingList = shoppingListResourceFromModelMapper.mapFrom(updatedShoppingList);
-		return Response.status(Status.OK).entity(shoppingList).build();
+		return Response.status(Status.CREATED).entity(shoppingList).build();
 	}
 }

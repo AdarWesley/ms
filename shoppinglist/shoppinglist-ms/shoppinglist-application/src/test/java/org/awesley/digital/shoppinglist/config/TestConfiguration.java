@@ -1,5 +1,6 @@
 package org.awesley.digital.shoppinglist.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.awesley.digital.gateway.config.GatewayConfiguration;
@@ -26,6 +27,7 @@ import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration(exclude = {
@@ -63,15 +65,22 @@ public class TestConfiguration {
 	}
 	
 	@Bean
+	@Scope("prototype")
 	public ShoppingList shoppingList() {
 		return new ShoppingListTest(); 
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public GroupRef groupRef() {
+		return new GroupRefTest();
 	}
 	
 	public class ShoppingListTest implements ShoppingList {
 
 		long id;
 		String name;
-		List<? extends GroupRef> groups;
+		List<? extends GroupRef> groups = new ArrayList<GroupRef>();
 		
 		@Override
 		public Long getID() {
@@ -105,4 +114,28 @@ public class TestConfiguration {
 
 	}
 
+	public class GroupRefTest implements GroupRef {
+		Long id;
+		String name;
+		
+		@Override
+		public Long getId() {
+			return id;
+		}
+		
+		@Override
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+		
+		@Override
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
 }

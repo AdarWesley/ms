@@ -26,6 +26,7 @@ import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,12 +36,17 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { 
-	TestConfiguration.class
-	//, CxfServiceSpringBootApplication.class 
-	// , ContractTestsBase.LocalTransportConfiguration.class 
-}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureStubRunner(ids = { "org.awesley.digital:usergroup-application:+:stubs" })
+@SpringBootTest(
+		classes = { 
+				TestConfiguration.class
+				//, CxfServiceSpringBootApplication.class 
+				// , ContractTestsBase.LocalTransportConfiguration.class 
+		}
+		, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+		, properties = { "extconnection.UserGroup.usergroupapi.url=http://localhost:8090" }
+		)
+@AutoConfigureStubRunner(ids = { "org.awesley.digital:usergroup-application:+:stubs:8090" }, 
+	workOffline = true, mappingsOutputFolder = "target/outputMappings")
 public class ContractTestsBase {
 
 	// private final static String ENDPOINT_ADDRESS = "local://services";
@@ -48,6 +54,9 @@ public class ContractTestsBase {
     private int port;
     private Server server;
 	private List<Object> providers;
+	
+	@Autowired
+	private ApplicationContext ctx;
 	
 	@Autowired
     private Bus bus;
@@ -113,14 +122,9 @@ public class ContractTestsBase {
 	}
 
 	private void initMockRepository() {
-		ShoppingList shoppingList = new ShoppingList() {
-			@Override public Long getID() { return 1L; }
-			@Override public void setID(Long id) {}
-			@Override public String getName() {	return "TestUser"; }
-			@Override public void setName(String name) {}
-			@Override public List<? extends GroupRef> getUserGroups() { return null; }
-			@Override public void setUserGroups(List<? extends GroupRef> groups) {}
-		};
+		ShoppingList shoppingList = ctx.getBean(ShoppingList.class);
+		shoppingList.setID(1L);
+		shoppingList.setName("ShoppingList1");
 			
 		org.mockito.BDDMockito.given(shoppingListRepository.getById(1L)).willReturn(shoppingList);
 		org.mockito.BDDMockito.given(shoppingListRepository.save(org.mockito.BDDMockito.any(ShoppingList.class)))
