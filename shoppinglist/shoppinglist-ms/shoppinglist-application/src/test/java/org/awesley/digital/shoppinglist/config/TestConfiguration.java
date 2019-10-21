@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.awesley.digital.gateway.config.GatewayConfiguration;
+import org.awesley.digital.shoppinglist.ShoppingListTestHelper;
 import org.awesley.digital.shoppinglist.application.CxfAppConfiguration;
 import org.awesley.digital.shoppinglist.application.JWTAuthorizationRequestInterceptor;
 import org.awesley.digital.shoppinglist.application.security.config.WebSecurityConfig;
-import org.awesley.digital.shoppinglist.config.TestConfiguration.ShoppingListTest;
 import org.awesley.digital.shoppinglist.resources.configuration.ResourcesConfiguration;
 import org.awesley.digital.shoppinglist.service.configuration.ServicesConfiguration;
 import org.awesley.digital.shoppinglist.service.model.GroupRef;
 import org.awesley.digital.shoppinglist.service.model.ShoppingList;
 import org.awesley.infra.applicativecontext.ApplicativeContextConfiguration;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration;
@@ -74,6 +75,12 @@ public class TestConfiguration {
 	@Scope("prototype")
 	public GroupRef groupRef() {
 		return new GroupRefTest();
+	}
+	
+	@Bean("org.awesley.digital.shoppinglist.ShoppingListTestHelper")
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public ShoppingListTestHelper shoppingListTestHelper() {
+		return new ShoppingListTestHelper();
 	}
 	
 	public class ShoppingListTest implements ShoppingList {

@@ -6,7 +6,9 @@ import org.awesley.digital.shoppinglist.persistence.implementation.jpa.entities.
 import org.awesley.digital.shoppinglist.service.interfaces.repository.IShoppingListRepository;
 import org.awesley.digital.shoppinglist.service.model.GroupRef;
 import org.awesley.digital.shoppinglist.service.model.ShoppingList;
+import org.awesley.infra.query.jpa.QueryExpressionToJpaVisitor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -15,6 +17,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @Configuration
 @EnableJpaRepositories(basePackages = { "org.awesley.digital.shoppinglist.persistence.implementation.jpa.repositories" })
 @EntityScan(basePackages = { "org.awesley.digital.shoppinglist.persistence.implementation.jpa.entities" })
+@ComponentScan(basePackageClasses = { QueryExpressionToJpaVisitor.class })
 public class PersistenceConfiguration {
 
 	@Bean

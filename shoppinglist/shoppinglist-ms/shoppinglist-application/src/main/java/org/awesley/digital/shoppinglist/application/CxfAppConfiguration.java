@@ -11,6 +11,7 @@ import org.apache.cxf.Bus;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.swagger.Swagger2Feature;
+import org.apache.cxf.spring.boot.autoconfigure.CxfProperties;
 import org.apache.cxf.transport.http.HttpDestinationFactory;
 import org.apache.cxf.transport.servlet.ServletDestinationFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
@@ -31,13 +33,22 @@ public class CxfAppConfiguration {
 	@Autowired
     private Bus bus;
 
+	@Bean
+	@Primary
+	public CxfProperties cxfProperties() {
+		CxfProperties props = new CxfProperties();
+		props.setPath("/");
+		return props;
+	}
+	
     @Bean
     public Server rsServer() {
-    	bus.setExtension(new ServletDestinationFactory(), HttpDestinationFactory.class);
+    	ServletDestinationFactory servletDestinationFactory = new ServletDestinationFactory();
+    	bus.setExtension(servletDestinationFactory, HttpDestinationFactory.class);
     	
         JAXRSServerFactoryBean endpoint = new JAXRSServerFactoryBean();
         endpoint.setBus(bus);
-        endpoint.setAddress("/");
+        endpoint.setAddress("/shoppinglist-service");
 
 		List<Object> providers = new ArrayList<Object>(ctx.getBeansWithAnnotation(Provider.class).values());
 		providers.add(jsonProvider(objectMapper()));
@@ -50,7 +61,9 @@ public class CxfAppConfiguration {
         
         endpoint.setFeatures(Arrays.asList(new Swagger2Feature()));
         
-        return endpoint.create();
+        Server server = endpoint.create();
+        
+        return server;
     }
 
 	@Bean

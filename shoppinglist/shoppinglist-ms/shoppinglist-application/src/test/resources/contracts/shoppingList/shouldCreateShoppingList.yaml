@@ -1,15 +1,15 @@
 request:
   method: POST
-  url: /shoppingList
+  url: /shoppinglist-service/shoppingList
   body:
-    name: ShoppingList Name
+    name: ShoppingList1
   headers:
     Content-Type: application/json
 response:
   status: 201
   body:
-    id: entity_id
-    name: entity_name
+    id: 1
+    name: ShoppingList1
   matchers:
     body:
       - path: $.id

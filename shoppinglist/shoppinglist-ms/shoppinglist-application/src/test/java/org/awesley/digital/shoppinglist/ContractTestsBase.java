@@ -14,6 +14,8 @@ import org.awesley.digital.shoppinglist.resources.interfaces.ShoppingListApi;
 import org.awesley.digital.shoppinglist.service.interfaces.repository.IShoppingListRepository;
 import org.awesley.digital.shoppinglist.service.model.GroupRef;
 import org.awesley.digital.shoppinglist.service.model.ShoppingList;
+import org.awesley.infra.contracttesting.ContractTestHelper;
+import org.awesley.infra.contracttesting.SupportsTestHelper;
 import org.awesley.infra.security.JwtTokenUtil;
 import org.awesley.infra.security.model.JwtAuthority;
 import org.junit.After;
@@ -27,6 +29,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +50,8 @@ import io.restassured.specification.RequestSpecification;
 		)
 @AutoConfigureStubRunner(ids = { "org.awesley.digital:usergroup-application:+:stubs:8090" }, 
 	workOffline = true, mappingsOutputFolder = "target/outputMappings")
-public class ContractTestsBase {
+@TestExecutionListeners(value = { ContractTestsExecutionListener.class }, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
+public class ContractTestsBase implements SupportsTestHelper<ContractTestsBase> {
 
 	// private final static String ENDPOINT_ADDRESS = "local://services";
     @LocalServerPort
@@ -58,11 +62,17 @@ public class ContractTestsBase {
 	@Autowired
 	private ApplicationContext ctx;
 	
+	private ContractTestHelper<ContractTestsBase> contractTestHelper;
+	
 	@Autowired
     private Bus bus;
 	
 	@MockBean
 	private IShoppingListRepository shoppingListRepository;
+	
+	public IShoppingListRepository getShoppingListRepository() {
+		return shoppingListRepository;
+	}
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -98,7 +108,7 @@ public class ContractTestsBase {
 		sf.setAddress(
 				"http://localhost:" + 
 				port + 
-				"/services");
+				"/shoppinglist-service");
 
 		server = sf.create();
 	}
@@ -110,12 +120,12 @@ public class ContractTestsBase {
 	}
 	
 	private void initRestAssuredRequestSpecification() {
-		RestAssured.baseURI = 
-	    		"http://localhost:" + 
-	    		port + 
-	    		"/services";
+//		RestAssured.baseURI = "http://localhost";
+//		RestAssured.port = port;
 	    
-	    testRequestSpecification = RestAssured.given();
+	    testRequestSpecification = RestAssured.given()
+	    		.baseUri("http://localhost")
+	    		.port(port);
 	    
 	    String mockToken = jwtTokenUtil.generateToken("TestUser", Arrays.asList(new JwtAuthority("ROLE_USER")));
 	    testRequestSpecification.header("Authorization", "Bearer " + mockToken);
@@ -152,5 +162,15 @@ public class ContractTestsBase {
 	   server.stop();
 	   server.destroy();
 	   providers = null;
+	}
+
+	@Override
+	public ContractTestHelper<ContractTestsBase> getContractTestHelper() {
+		return this.contractTestHelper;
+	}
+
+	@Override
+	public void setContractTestsHelper(ContractTestHelper<ContractTestsBase> contractTestHelper) {
+		this.contractTestHelper = contractTestHelper;
 	}
 }

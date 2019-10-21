@@ -24,16 +24,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = {
 		PersistenceTestConfiguration.class
 		,PersistenceConfiguration.class	
-	},
-	properties = {
-		"spring.datasource.url=jdbc:mysql://localhost:3306/usergroup?useSSL=false&allowPublicKeyRetrieval=true"
-		,"spring.datasource.username=root"
-		,"spring.datasource.password=adarRada"			
-		,"spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver"
-		,"spring.jpa.generate-ddl=true"
-		,"spring.jpa.hibernate.ddl-auto=create"
-		,"spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect"
-		,"spring.jpa.properties.javax.persistence.validation.mode=none"
 	}
 )
 public class DbAccessTest {

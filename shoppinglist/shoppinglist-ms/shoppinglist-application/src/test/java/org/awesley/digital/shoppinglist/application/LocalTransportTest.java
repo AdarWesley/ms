@@ -39,7 +39,7 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 }) //, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LocalTransportTest {
 
-	private final static String ENDPOINT_ADDRESS = "local://services";
+	private final static String ENDPOINT_ADDRESS = "local://shoppinglist-service";
 	private static Server server;
 
 	private static List<Object> providers;

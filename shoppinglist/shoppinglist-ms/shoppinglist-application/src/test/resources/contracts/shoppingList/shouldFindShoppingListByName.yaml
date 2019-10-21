@@ -1,6 +1,6 @@
 request:
   method: GET
-  url: /shoppinglist-service/shoppingList/1
+  url: /shoppinglist-service/shoppingList?filter=name%3DShoppingList1&startIndex=0&pageSize=1
   body:
   headers:
     Content-Type: application/json
@@ -13,7 +13,7 @@ response:
     body:
       - path: $.id
         type: by_regex
-        predefined: non_empty
+        predefined: number
       - path: $.name
         type: by_regex
         predefined: non_empty
