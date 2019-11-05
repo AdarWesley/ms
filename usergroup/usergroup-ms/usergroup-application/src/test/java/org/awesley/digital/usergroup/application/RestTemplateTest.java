@@ -73,7 +73,7 @@ public class RestTemplateTest {
 	@Test
 	@WithMockUser(username="TestAdmin", roles= {"ADMIN"})
 	public void canLoadUserGroup() {
-		ResponseEntity<UserGroup> entity = testRestTemplate.getForEntity("http://localhost:" + this.port + "/services/userGroup/1", UserGroup.class);
+		ResponseEntity<UserGroup> entity = testRestTemplate.getForEntity("http://localhost:" + this.port + "/usergroup-service/userGroup/1", UserGroup.class);
 		assertEquals(HttpStatus.OK, entity.getStatusCode());
 	}
 }

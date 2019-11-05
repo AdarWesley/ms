@@ -1,6 +1,6 @@
 request:
   method: POST
-  url: /userGroup
+  url: /usergroup-service/userGroup
   body:
     name: UserGroup Name
   headers:

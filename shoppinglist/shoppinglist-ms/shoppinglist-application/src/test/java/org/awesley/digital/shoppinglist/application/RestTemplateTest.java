@@ -73,7 +73,7 @@ public class RestTemplateTest {
 	@Test
 	@WithMockUser(username="TestAdmin", roles= {"ADMIN"})
 	public void canLoadShoppingList() {
-		ResponseEntity<ShoppingList> entity = testRestTemplate.getForEntity("http://localhost:" + this.port + "/services/shoppingList/1", ShoppingList.class);
+		ResponseEntity<ShoppingList> entity = testRestTemplate.getForEntity("http://localhost:" + this.port + "/shoppinglist-service/shoppingList/1", ShoppingList.class);
 		assertEquals(HttpStatus.OK, entity.getStatusCode());
 	}
 }

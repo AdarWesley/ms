@@ -1,6 +1,6 @@
 request:
   method: GET
-  url: /userGroup/1
+  url: /usergroup-service/userGroup/1
   body:
   headers:
     Content-Type: application/json

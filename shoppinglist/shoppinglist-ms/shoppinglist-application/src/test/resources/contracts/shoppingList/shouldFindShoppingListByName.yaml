@@ -1,6 +1,6 @@
 request:
   method: GET
-  url: /usergroup-service/userGroup?filter=name%3DGroup1&startIndex=0&pageSize=1
+  url: /shoppinglist-service/shoppingList?filter=name%3DShoppingList1&startIndex=0&pageSize=1
   body:
   headers:
     Content-Type: application/json
@@ -8,7 +8,7 @@ response:
   status: 200
   body:
     id: 1
-    name: Group1
+    name: ShoppingList1
   matchers:
     body:
       - path: $.id

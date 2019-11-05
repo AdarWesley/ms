@@ -3,20 +3,32 @@ package org.awesley.digital.shoppinglist.resources.implementation.delegate;
 import org.awesley.digital.shoppinglist.resources.interfaces.IResourceFromModelMapper;
 import org.awesley.digital.shoppinglist.resources.interfaces.IResourceToModelMapper;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.awesley.digital.shoppinglist.resources.interfaces.ShoppingListApi;
+import org.awesley.digital.shoppinglist.resources.models.GroupName;
 import org.awesley.digital.shoppinglist.resources.models.ShoppingList;
 import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListAssociateGroupService;
 import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListCreateService;
+import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListFindService;
 import org.awesley.digital.shoppinglist.service.interfaces.business.IShoppingListGetService;
+import org.awesley.infra.query.QueryExpression;
+import org.awesley.infra.query.parser.QueryExpressionParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ShoppingListApiImpl implements ShoppingListApi {
 
 	@Autowired
 	private IShoppingListGetService shoppingListGetService;
+	
+	@Autowired
+	private IShoppingListFindService shoppingListFindService;
 	
 	@Autowired
 	private IShoppingListCreateService shoppingListCreateService;
@@ -47,7 +59,18 @@ public class ShoppingListApiImpl implements ShoppingListApi {
 
 	@Override
 	public Response findShoppingList(String filter, Integer startIndex, Integer pageSize) {
-		return null;
+		try {
+			filter = URLDecoder.decode(filter, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		
+		QueryExpressionParser expressionParser = new QueryExpressionParser(filter);
+		expressionParser.Parse();
+		QueryExpression expression = expressionParser.getQueryExpression();
+		List<? extends org.awesley.digital.shoppinglist.service.model.ShoppingList> shoppingListList = 
+				shoppingListFindService.find(expression, startIndex, pageSize);
+		return Response.ok(shoppingListList.get(0)).build();
 	}
 
 	@Override
@@ -57,11 +80,13 @@ public class ShoppingListApiImpl implements ShoppingListApi {
 	}
 
 	@Override
-	public Response associateGroup(Long id, String groupName) {
+	public Response associateGroup(Long id, GroupName groupName) {
 		org.awesley.digital.shoppinglist.service.model.ShoppingList modelShoppingList = shoppingListGetService.GetShoppingList(id);
+		
 		org.awesley.digital.shoppinglist.service.model.ShoppingList updatedShoppingList = 
-				shoppingListAssociateGroupService.associateGroup(modelShoppingList, groupName);
+				shoppingListAssociateGroupService.associateGroup(modelShoppingList, groupName.getGroupName());
+		
 		ShoppingList shoppingList = shoppingListResourceFromModelMapper.mapFrom(updatedShoppingList);
-		return Response.status(Status.OK).entity(shoppingList).build();
+		return Response.status(Status.CREATED).entity(shoppingList).build();
 	}
 }

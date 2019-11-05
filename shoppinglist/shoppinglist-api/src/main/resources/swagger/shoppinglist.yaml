@@ -4,7 +4,7 @@ info:
   description: shoppinglist REST API definition
   version: 1.0.0
   title: shoppinglist
-basePath: /api
+basePath: /shoppinglist-service
 schemes:
 - http
 
@@ -151,12 +151,12 @@ paths:
         required: true
         type: integer
         format: int64
-      - in: body
-        description: A name of a user group to associate with the shopping list.
+      - in: "body"
+        name: "body"
+        description: "Array of UserGroup names to associate with the ShoppingList"
         required: true
-        name: groupName
         schema:
-          type: string
+          $ref: "#/definitions/GroupName"
       responses:
         200:
           description: user group was successfully associated with shopping list.
@@ -186,5 +186,11 @@ definitions:
       groupId:
         type: integer
         format: int64
+      groupName:
+        type: string
+  GroupName:
+    type: object
+    description: A reference to a UserGroup by name
+    properties:
       groupName:
         type: string

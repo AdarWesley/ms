@@ -1,14 +1,14 @@
 request:
   method: GET
-  url: /shoppingList/1
+  url: /shoppinglist-service/shoppingList/1
   body:
   headers:
     Content-Type: application/json
 response:
   status: 200
   body:
-    id: entity_id
-    name: entity_name
+    id: 1
+    name: ShoppingList1
   matchers:
     body:
       - path: $.id

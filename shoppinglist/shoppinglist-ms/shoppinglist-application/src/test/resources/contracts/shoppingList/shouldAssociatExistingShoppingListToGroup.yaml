@@ -1,8 +1,8 @@
 request:
   method: POST
   url: /shoppingList/1/groups
-  body:
-    groupName: Group Name
+  body: 
+    groupName: Group1
   headers:
     Content-Type: application/json
 response:
@@ -12,7 +12,7 @@ response:
     name: ShoppingList1
     groups:
       - groupId: 1
-        groupName: Group Name
+        groupName: Group1
   matchers:
     body:
       - path: $.id
