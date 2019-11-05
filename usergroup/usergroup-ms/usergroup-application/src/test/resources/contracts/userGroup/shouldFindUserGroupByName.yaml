@@ -1,0 +1,22 @@
+request:
+  method: GET
+  urlPath: /api/userGroup
+  queryParameters:
+    filter: name=Usergroup1
+    startIndex: 0
+    pageSize: 1
+  body:
+  headers:
+    Content-Type: application/json
+response:
+  status: 200
+  body:
+    id: 1
+    name: Usergroup1
+  matchers:
+    body:
+      - path: $.id
+        type: by_equality
+      - path: $.name
+        type: by_equality
+ 
