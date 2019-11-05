@@ -1,4 +1,4 @@
-FROM awesley/alpine-orajdk8u201:latest
+FROM openjdk:8-alpine
 VOLUME /tmp
 COPY target/digital-login-application.jar /app.jar
 EXPOSE 8080
