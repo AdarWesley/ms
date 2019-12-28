@@ -10,32 +10,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.awesley.digital.shoppinglist.service.model.GroupRef;
+import org.awesley.digital.shoppinglist.service.model.ListItem;
 
 @Entity
-@Table(name = "TBL_GROUP_REF")
-public class JpaGroupRef implements GroupRef {
+@Table(name = "TBL_LIST_ITEM")
+public class JpaListItem implements ListItem {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "GROUP_ID")
+	@Column(name = "ITEM_ID")
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_SHOPPINGLIST", nullable = false)
 	private JpaShoppingList shoppingList;
-		
-	@Column(name = "GROUP_NAME")
-	private String groupName;
+	
+	@Column(name = "ITEM_DESCRIPTION")
+	private String itemDescription;
 	
 	@Override
-	public Long getId() {
+	public Long getItemId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Long id) {
-		this.id = id;
+	public void setItemId(Long listItemId) {
+		this.id = listItemId;
 	}
 
 	public JpaShoppingList getShoppingList() {
@@ -47,13 +47,12 @@ public class JpaGroupRef implements GroupRef {
 	}
 
 	@Override
-	public String getGroupName() {
-		return groupName;
+	public String getItemDescription() {
+		return itemDescription;
 	}
 
 	@Override
-	public void setGroupName(String name) {
-		this.groupName = name;
+	public void setItemDescription(String itemDescription) {
+		this.itemDescription = itemDescription;
 	}
-
 }

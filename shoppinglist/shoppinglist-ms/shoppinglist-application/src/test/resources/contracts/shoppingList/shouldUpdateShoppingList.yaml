@@ -1,0 +1,56 @@
+request:
+  method: POST
+  url: /shoppinglist-service/shoppingList/1
+  body:
+    name: ShoppingList1 updated
+    listItems:
+      - listItemId: 1234
+        itemDescription: List item 1234
+      - listItemId: 5678
+        itemDescription: List item 5678
+    groups:
+      - groupId: 1
+        groupName: Group1
+  headers:
+    Content-Type: application/json
+response:
+  status: 200
+  body:
+    id: 1
+    name: ShoppingList1 updated
+    listItems:
+      - listItemId: 1234
+        itemDescription: List item 1234
+      - listItemId: 5678
+        itemDescription: List item 5678
+    groups:
+      - groupId: 1
+        groupName: Group1
+  matchers:
+    body:
+      - path: $.id
+        type: by_regex
+        predefined: non_empty
+      - path: $.name
+        type: by_regex
+        predefined: non_empty
+      - path: $.listItems
+        type: by_type
+        minOccurrence: 2
+        maxOccurrence: 2
+      - path: $.listItems[0].listItemId
+        type: by_equality
+      - path: $.listItems[0].itemDescription
+        type: by_equality
+      - path: $.listItems[1].listItemId
+        type: by_equality
+      - path: $.listItems[1].itemDescription
+        type: by_equality
+      - path: $.groups
+        type: by_type
+        minOccurrence: 1
+        maxOccurrence: 1
+      - path: $.groups[0].groupId
+        type: by_equality
+      - path: $.groups[0].groupName
+        type: by_equality

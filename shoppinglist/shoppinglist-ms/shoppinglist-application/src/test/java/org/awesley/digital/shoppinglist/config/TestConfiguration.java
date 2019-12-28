@@ -11,6 +11,7 @@ import org.awesley.digital.shoppinglist.application.security.config.WebSecurityC
 import org.awesley.digital.shoppinglist.resources.configuration.ResourcesConfiguration;
 import org.awesley.digital.shoppinglist.service.configuration.ServicesConfiguration;
 import org.awesley.digital.shoppinglist.service.model.GroupRef;
+import org.awesley.digital.shoppinglist.service.model.ListItem;
 import org.awesley.digital.shoppinglist.service.model.ShoppingList;
 import org.awesley.infra.applicativecontext.ApplicativeContextConfiguration;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -73,6 +74,12 @@ public class TestConfiguration {
 	
 	@Bean
 	@Scope("prototype")
+	public ListItem listItem() {
+		return new ListItemTest();
+	}
+	
+	@Bean
+	@Scope("prototype")
 	public GroupRef groupRef() {
 		return new GroupRefTest();
 	}
@@ -87,7 +94,8 @@ public class TestConfiguration {
 
 		long id;
 		String name;
-		List<? extends GroupRef> groups = new ArrayList<GroupRef>();
+		List<GroupRefTest> groups = new ArrayList<GroupRefTest>();
+		List<ListItemTest> listItems = new ArrayList<ListItemTest>();
 		
 		@Override
 		public Long getID() {
@@ -114,16 +122,59 @@ public class TestConfiguration {
 			return groups;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void setUserGroups(List<? extends GroupRef> groups) {
-			this.groups = groups;
+			this.groups.clear();
+			if (groups != null) {
+				this.groups.addAll((List<GroupRefTest>)groups);
+			}
 		}
 
+		@Override
+		public List<? extends ListItem> getListItems() {
+			return this.listItems;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void setListItems(List<? extends ListItem> itemsList) {
+			this.listItems.clear();
+			if (itemsList != null) {
+				this.listItems.addAll((List<ListItemTest>)itemsList);
+			}
+		}
 	}
 
+	public class ListItemTest implements ListItem {
+
+		Long itemId;
+		String itemDescription;
+		
+		@Override
+		public Long getItemId() {
+			return itemId;
+		}
+
+		@Override
+		public void setItemId(Long listItemId) {
+			this.itemId = listItemId;
+		}
+
+		@Override
+		public String getItemDescription() {
+			return itemDescription;
+		}
+
+		@Override
+		public void setItemDescription(String itemDescription) {
+			this.itemDescription = itemDescription;
+		}
+	}
+	
 	public class GroupRefTest implements GroupRef {
 		Long id;
-		String name;
+		String groupName;
 		
 		@Override
 		public Long getId() {
@@ -136,13 +187,13 @@ public class TestConfiguration {
 		}
 
 		@Override
-		public String getName() {
-			return name;
+		public String getGroupName() {
+			return groupName;
 		}
 		
 		@Override
-		public void setName(String name) {
-			this.name = name;
+		public void setGroupName(String name) {
+			this.groupName = name;
 		}
 	}
 }
