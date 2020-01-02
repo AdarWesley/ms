@@ -11,4 +11,7 @@ public interface ShoppingList {
 	
 	List<? extends GroupRef> getUserGroups();
 	void setUserGroups(List<? extends GroupRef> groups);
+	
+	List<? extends ListItem> getListItems();
+	void setListItems(List<? extends ListItem> itemsList);
 }

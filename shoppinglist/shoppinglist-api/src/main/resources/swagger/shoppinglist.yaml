@@ -134,6 +134,37 @@ paths:
         404:
           description: The requested ShoppingList resource instance was not found.
 
+  /shoppingList/{id}/items:
+    put:
+      tags:
+      - ShoppingList
+      description: "Add an item to the shoppingList identified by id."
+      operationId: addItem
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: id
+        description: "ID of the ShoppingList instance to add an item to."
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: body
+        description: "Array of ListItems to add to the ShoppingList"
+        required: true
+        schema:
+          $ref: "#/definitions/ListItem"
+      responses:
+        200:
+          description: "ListItem was successfully added to the ShoppingList"
+          schema:
+            $ref: "#/definitions/ShoppingList"
+        404:
+          description: "The requested ShoppingList resource instance was not found."
+            
   /shoppingList/{id}/groups:
     post:
       tags:
@@ -175,10 +206,23 @@ definitions:
         format: int64
       name:
         type: string
+      listItems:
+        type: array
+        items:
+          $ref: "#/definitions/ListItem"
       groups:
         type: array
         items:
           $ref: "#/definitions/UsersGroup"
+  ListItem:
+    type: object
+    description: A single list item
+    properties:
+      listItemId:
+        type: integer
+        format: int64
+      itemDescription:
+        type: string
   UsersGroup:
     type: object
     description: A group of users.

@@ -13,8 +13,10 @@ import org.awesley.digital.shoppinglist.config.TestConfiguration;
 import org.awesley.digital.shoppinglist.resources.interfaces.ShoppingListApi;
 import org.awesley.digital.shoppinglist.service.interfaces.repository.IShoppingListRepository;
 import org.awesley.digital.shoppinglist.service.model.GroupRef;
+import org.awesley.digital.shoppinglist.service.model.ListItem;
 import org.awesley.digital.shoppinglist.service.model.ShoppingList;
 import org.awesley.infra.contracttesting.ContractTestHelper;
+import org.awesley.infra.contracttesting.ContractTestsExecutionListener;
 import org.awesley.infra.contracttesting.SupportsTestHelper;
 import org.awesley.infra.security.JwtTokenUtil;
 import org.awesley.infra.security.model.JwtAuthority;
@@ -50,7 +52,7 @@ import io.restassured.specification.RequestSpecification;
 		)
 @AutoConfigureStubRunner(ids = { "org.awesley.digital:usergroup-application:+:stubs:8090" }, 
 	workOffline = true, mappingsOutputFolder = "target/outputMappings")
-@TestExecutionListeners(value = { ContractTestsExecutionListener.class }, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
+@TestExecutionListeners(value = { ContractTestsExecutionListener.class }, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public class ContractTestsBase implements SupportsTestHelper<ContractTestsBase> {
 
 	// private final static String ENDPOINT_ADDRESS = "local://services";
@@ -143,6 +145,19 @@ public class ContractTestsBase implements SupportsTestHelper<ContractTestsBase> 
 				public ShoppingList answer(InvocationOnMock invocation) throws Throwable {
 					ShoppingList shoppingList = (ShoppingList)invocation.getArgument(0);
 					shoppingList.setID(1L);
+					List<? extends ListItem> itemsList = shoppingList.getListItems();
+					for (int i = 0; i < itemsList.size(); i++) {
+						if (itemsList.get(i).getItemId() == null) {
+							itemsList.get(i).setItemId((long)(i + 1));
+						}
+					}
+					
+					List<? extends GroupRef> groups = shoppingList.getUserGroups();
+					for (int i = 0; i < groups.size(); i++) {
+						if (groups.get(i).getId() == null) {
+							groups.get(i).setId((long)(i + 1));
+						}
+					}
 					return shoppingList;
 				}
 			});

@@ -1,18 +1,18 @@
 request:
-  method: POST
-  url: /shoppinglist-service/shoppingList/1/groups
+  method: PUT
+  url: /shoppinglist-service/shoppingList/1/items
   body: 
-    groupName: Group1
+    itemDescription: Happyness in a jar
   headers:
     Content-Type: application/json
 response:
-  status: 201
+  status: 200
   body:
     id: 1
     name: ShoppingList1
-    groups:
-      - groupId: 1
-        groupName: Group1
+    listItems:
+      - listItemId: 1
+        itemDescription: Happyness in a jar
   matchers:
     body:
       - path: $.id
@@ -21,10 +21,10 @@ response:
       - path: $.name
         type: by_regex
         predefined: non_empty
-      - path: $.groups
+      - path: $.listItems
         type: by_type
         minOccurrence: 1
-      - path: $.groups[0].groupId
+      - path: $.listItems[0].listItemId
         type: by_equality
-      - path: $.groups[0].groupName
+      - path: $.listItems[0].itemDescription
         type: by_equality

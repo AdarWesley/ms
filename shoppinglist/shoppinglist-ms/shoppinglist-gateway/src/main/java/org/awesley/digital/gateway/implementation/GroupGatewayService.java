@@ -20,7 +20,7 @@ public class GroupGatewayService implements IGroupGatewayService {
 		UserGroup group = userGroupApi.findUserGroup("name=" + groupName, 0, 1);
 		GroupRef groupRef = ctx.getBean(GroupRef.class);
 		groupRef.setId(group.getId());
-		groupRef.setName(group.getName());
+		groupRef.setGroupName(group.getName());
 		return groupRef;
 	}
 

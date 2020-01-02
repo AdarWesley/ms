@@ -4,7 +4,7 @@ public interface GroupRef {
 
 	Long getId();
 	void setId(Long id);
-	String getName();
-	void setName(String name);
+	String getGroupName();
+	void setGroupName(String name);
 
 }
